@@ -27,7 +27,7 @@ defmodule Obelisk.Mixfile do
      {:plug, "~> 1.0"},
      {:rss, "~> 0.2"},
      {:mock, "~> 0.1"},
-     {:calliope, "~> 0.3"}]
+    ]
   end
 
   defp package do
