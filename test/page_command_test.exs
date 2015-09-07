@@ -6,8 +6,8 @@ defmodule PageTaskTest do
   end
 
   test "Create new post" do
-    Obelisk.Tasks.Init.run([])
-    Obelisk.Tasks.Page.run([ "An awesome page" ])
+    Mix.Tasks.Obelisk.Init.run([])
+    Mix.Tasks.Obelisk.Page.run([ "An awesome page" ])
 
     assert File.exists? "./pages/an-awesome-page.markdown"
     content = File.read! "./pages/an-awesome-page.markdown"
@@ -15,10 +15,9 @@ defmodule PageTaskTest do
   end
 
   test "Command should fail if no args are passed" do
-    Obelisk.Tasks.Init.run([])
+    Mix.Tasks.Obelisk.Init.run([])
     assert_raise ArgumentError, "Cannot create a new page without the post name", fn ->
-      Obelisk.Tasks.Page.run([])
+      Mix.Tasks.Obelisk.Page.run([])
     end
   end
-
 end

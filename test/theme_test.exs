@@ -14,14 +14,14 @@ defmodule ThemeTest do
   end
 
   test "Default theme works" do
-    Obelisk.Tasks.Init.run []
+    Mix.Tasks.Obelisk.Init.run []
     "default" = Obelisk.Config.config |> Dict.get(:theme)
     assert Obelisk.Theme.ensure
   end
 
   test "github theme doesn't get cloned if exists" do
     # Works off repo name so we can use 'default'
-    Obelisk.Tasks.Init.run []
+    Mix.Tasks.Obelisk.Init.run []
     repo = "https://github.com/bennyhallett/default.git"
     Obelisk.Config.force %{ theme: "bennyhallett/default" }
 
@@ -44,7 +44,7 @@ defmodule ThemeTest do
 
   test "url theme doesnt get cloned if it exists" do
     # Works off repo name so we can use 'default'
-    Obelisk.Tasks.Init.run []
+    Mix.Tasks.Obelisk.Init.run []
     repo = "https://github.com/bennyhallett/default.git"
     Obelisk.Config.force %{ theme: repo }
 
@@ -79,6 +79,4 @@ defmodule ThemeTest do
     Obelisk.Config.force %{ theme: "http://example.com/random/theme.git" }
     assert "theme" == Obelisk.Theme.current
   end
-
-
 end

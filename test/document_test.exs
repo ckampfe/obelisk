@@ -7,8 +7,8 @@ defmodule DocumentTest do
   end
 
   test "Prepare document" do
-    Obelisk.Tasks.Init.run []
-    Obelisk.Tasks.Build.run []
+    Mix.Tasks.Obelisk.Init.run []
+    Mix.Tasks.Obelisk.Build.run []
     create_post(10)
     file = "./posts/#{filename(10)}.markdown"
 
@@ -51,5 +51,4 @@ defmodule DocumentTest do
     `and some inline code` for good measure
     """
   end
-
 end

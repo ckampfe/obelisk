@@ -1,5 +1,4 @@
-%{"anubis": {:hex, :anubis, "0.3.0"},
-  "calliope": {:hex, :calliope, "0.3.0"},
+%{"calliope": {:hex, :calliope, "0.3.0"},
   "chronos": {:hex, :chronos, "1.5.1"},
   "cowboy": {:hex, :cowboy, "1.0.2"},
   "cowlib": {:hex, :cowlib, "1.0.1"},

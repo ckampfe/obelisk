@@ -1,5 +1,6 @@
-defmodule Obelisk.Tasks.Draft do
-  
+defmodule Mix.Tasks.Obelisk.Draft do
+  use Mix.Task
+
   @moduledoc """
   This task creates a new draft with the given post title argument as part of the filename,
   and included in the front matter title
@@ -26,5 +27,4 @@ defmodule Obelisk.Tasks.Draft do
   def run(args) do
     hd(args) |> Obelisk.Draft.create
   end
-
 end

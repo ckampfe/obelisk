@@ -26,7 +26,6 @@ defmodule Obelisk.Mixfile do
      {:cowboy, "~> 1.0"},
      {:plug, "~> 1.0"},
      {:rss, "~> 0.2"},
-     {:anubis, "~> 0.3"},
      {:mock, "~> 0.1"},
      {:calliope, "~> 0.3"}]
   end

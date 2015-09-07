@@ -7,7 +7,7 @@ defmodule PageTest do
   end
 
   test "can list pages" do
-    Obelisk.Tasks.Init.run []
+    Mix.Tasks.Obelisk.Init.run []
     File.touch "./pages/about-me.markdown"
     pages = Obelisk.Page.list
     assert 1 == Enum.count(pages)

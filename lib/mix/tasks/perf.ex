@@ -78,5 +78,4 @@ defmodule Mix.Tasks.Perf do
     File.rm "./site.yml"
     File.rm_rf "./build"
   end
-
 end

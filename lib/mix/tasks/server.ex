@@ -1,10 +1,11 @@
-defmodule Obelisk.Tasks.Server do
-  
+defmodule Mix.Tasks.Obelisk.Server do
+  use Mix.Task
+
   @moduledoc """
   This task starts the Obelisk server
 
   ## Switches
-  
+
   None.
   """
 
@@ -21,5 +22,4 @@ defmodule Obelisk.Tasks.Server do
   defp wait_til_dead(pid), do: _wait_til_dead(pid, Process.alive?(pid))
   defp _wait_til_dead(pid, true), do: _wait_til_dead(pid, Process.alive?(pid))
   defp _wait_til_dead(_, _), do: nil
-
 end

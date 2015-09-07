@@ -2,7 +2,7 @@ defmodule StoreTest do
   use ExUnit.Case, async: false
 
   setup do
-    Obelisk.Tasks.Init.run []
+    Mix.Tasks.Obelisk.Init.run []
     on_exit fn -> TestHelper.cleanup end
   end
 
@@ -48,5 +48,4 @@ defmodule StoreTest do
     assert length(stored_pages) == 3
     assert Enum.join(stored_pages) == "ABC"
   end
-
 end

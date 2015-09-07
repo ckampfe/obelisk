@@ -2,7 +2,7 @@ defmodule LayoutTest do
   use ExUnit.Case, async: false
 
   setup do
-    Obelisk.Tasks.Init.run []
+    Mix.Tasks.Obelisk.Init.run []
     Obelisk.Config.force %{ theme: "default", posts_per_page: 5 }
     on_exit fn -> TestHelper.cleanup end
   end
@@ -154,6 +154,4 @@ defmodule LayoutTest do
 
     assert { "index", :haml } == Obelisk.Layout.index
   end
-
-
 end

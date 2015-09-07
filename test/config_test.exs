@@ -13,7 +13,7 @@ defmodule ConfigTest do
   end
 
   test "loading config succeeds" do
-    Obelisk.Tasks.Init.run([])
+    Mix.Tasks.Obelisk.Init.run([])
     Obelisk.Config.reload
     config = Obelisk.Config.config
     assert "A brand new static site" == config.name

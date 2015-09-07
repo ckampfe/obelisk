@@ -1,10 +1,11 @@
-defmodule Obelisk.Tasks.Build do
+defmodule Mix.Tasks.Obelisk.Build do
+  use Mix.Task
 
   @moduledoc """
   This task builds the output of your static site
 
   ## Switches
-  
+
   None.
   """
 
@@ -25,5 +26,4 @@ defmodule Obelisk.Tasks.Build do
     Obelisk.RSS.build_feed posts
     Obelisk.Blog.compile_index(posts, store)
   end
-
 end

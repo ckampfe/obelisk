@@ -7,35 +7,35 @@ defmodule BuildTaskTest do
   end
 
   test "Build task compiles posts into the build dir" do
-    Obelisk.Tasks.Init.run([])
+    Mix.Tasks.Obelisk.Init.run([])
     Obelisk.Config.reload
     Enum.each(10..15, fn day -> create_post day end)
-    Obelisk.Tasks.Build.run([])
+    Mix.Tasks.Obelisk.Build.run([])
 
     Enum.each(10..15, fn day -> assert File.exists?("./build/#{filename(day)}.html") end)
   end
 
   test "Build task compiled pages into the build dir" do
-    Obelisk.Tasks.Init.run([])
+    Mix.Tasks.Obelisk.Init.run([])
     Obelisk.Config.reload
     Enum.each(10..15, fn day -> create_page day end)
-    Obelisk.Tasks.Build.run([])
+    Mix.Tasks.Obelisk.Build.run([])
 
     Enum.each(10..15, fn day -> assert File.exists?("./build/#{pagename(day)}.html") end)
   end
 
   test "Index page doesnt include next link on last page" do
-    Obelisk.Tasks.Init.run([])
+    Mix.Tasks.Obelisk.Init.run([])
     Obelisk.Config.reload
-    Obelisk.Tasks.Build.run([])
+    Mix.Tasks.Obelisk.Build.run([])
 
     assert !String.contains? File.read!("./build/index.html"), "<a href=\"index2.html\">Next Page</a>"
   end
 
   test "Build task copies assets into the build dir" do
-    Obelisk.Tasks.Init.run([])
+    Mix.Tasks.Obelisk.Init.run([])
     Obelisk.Config.reload
-    Obelisk.Tasks.Build.run([])
+    Mix.Tasks.Obelisk.Build.run([])
 
     assert File.dir? "./build/assets"
     assert File.dir? "./build/assets/css"
@@ -44,7 +44,7 @@ defmodule BuildTaskTest do
   end
 
   test "Config limits items per index page" do
-    Obelisk.Tasks.Init.run []
+    Mix.Tasks.Obelisk.Init.run []
     Obelisk.Config.reload
     1..10 |> Enum.each(&(create_post &1))
     File.write("site.yml", """
@@ -56,7 +56,7 @@ defmodule BuildTaskTest do
     theme: default
     """)
     Obelisk.Config.reload
-    Obelisk.Tasks.Build.run []
+    Mix.Tasks.Obelisk.Build.run []
 
     assert File.exists? "./build/index.html"
     assert File.exists? "./build/index2.html"
@@ -72,7 +72,7 @@ defmodule BuildTaskTest do
   end
 
   test "build blog part to different page" do
-    Obelisk.Tasks.Init.run([])
+    Mix.Tasks.Obelisk.Init.run([])
     1..10 |> Enum.each(&(create_post &1))
     File.write("site.yml", """
     ---
@@ -84,14 +84,14 @@ defmodule BuildTaskTest do
     blog_index: "blog.html"
     """)
     Obelisk.Config.reload
-    Obelisk.Tasks.Build.run([])
+    Mix.Tasks.Obelisk.Build.run([])
 
     assert File.exists? "./build/blog.html"
     assert File.exists? "./build/blog2.html"
   end
 
   test "build blog part to different directory" do
-    Obelisk.Tasks.Init.run([])
+    Mix.Tasks.Obelisk.Init.run([])
     1..10 |> Enum.each(&(create_post &1))
     File.write("site.yml", """
     ---
@@ -103,7 +103,7 @@ defmodule BuildTaskTest do
     blog_index: "blog/index.html"
     """)
     Obelisk.Config.reload
-    Obelisk.Tasks.Build.run([])
+    Mix.Tasks.Obelisk.Build.run([])
 
     assert File.exists? "./build/blog/index.html"
     assert File.exists? "./build/blog/index2.html"
@@ -143,5 +143,4 @@ defmodule BuildTaskTest do
     `and some inline code` for good measure
     """
   end
-
 end

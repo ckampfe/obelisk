@@ -1,12 +1,13 @@
-defmodule Obelisk.Tasks.Post do
-  
+defmodule Mix.Tasks.Obelisk.Post do
+  use Mix.Task
+
   @moduledoc """
   This task creates a new post with the given post title argument as part of the filename,
   and included in the front matter title
 
   ## Arguments
 
-  * Post title
+  * Post tit
 
   ## Usage
 
@@ -26,5 +27,4 @@ defmodule Obelisk.Tasks.Post do
   def run(args) do
     hd(args) |> Obelisk.Post.create
   end
-
 end

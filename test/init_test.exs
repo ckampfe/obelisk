@@ -6,7 +6,7 @@ defmodule InitTaskTest do
   end
 
   test "Init task creates assets directory structure" do
-    Obelisk.Tasks.Init.run([])
+    Mix.Tasks.Obelisk.Init.run([])
 
     assert File.dir? "./themes"
     assert File.dir? "./themes/default"
@@ -23,7 +23,7 @@ defmodule InitTaskTest do
   end
 
   test "Init task creates content directory structure" do
-    Obelisk.Tasks.Init.run([])
+    Mix.Tasks.Obelisk.Init.run([])
 
     assert File.dir? "./posts"
     assert File.dir? "./drafts"
@@ -31,13 +31,13 @@ defmodule InitTaskTest do
   end
 
   test "Init task creates initial config file" do
-    Obelisk.Tasks.Init.run([])
+    Mix.Tasks.Obelisk.Init.run([])
 
     assert File.exists? "./site.yml"
   end
 
   test "Init task creates first post" do
-    Obelisk.Tasks.Init.run([])
+    Mix.Tasks.Obelisk.Init.run([])
 
     assert File.exists? "./posts/#{TestHelper.datepart}-welcome-to-obelisk.markdown"
   end

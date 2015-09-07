@@ -6,8 +6,8 @@ defmodule DraftTaskTest do
   end
 
   test "Create new draft" do
-    Obelisk.Tasks.Init.run([])
-    Obelisk.Tasks.Draft.run([ "Not quite ready yet" ])
+    Mix.Tasks.Obelisk.Init.run([])
+    Mix.Tasks.Obelisk.Draft.run([ "Not quite ready yet" ])
 
     assert File.exists? "./drafts/#{TestHelper.datepart}-not-quite-ready-yet.markdown"
     content = File.read! "./drafts/#{TestHelper.datepart}-not-quite-ready-yet.markdown"
@@ -15,10 +15,9 @@ defmodule DraftTaskTest do
   end
 
   test "Command should fail if no args are passed" do
-    Obelisk.Tasks.Init.run([])
+    Mix.Tasks.Obelisk.Init.run([])
     assert_raise ArgumentError, "Cannot create a new draft without the post name", fn ->
-      Obelisk.Tasks.Draft.run([])
+      Mix.Tasks.Obelisk.Draft.run([])
     end
   end
-
 end
