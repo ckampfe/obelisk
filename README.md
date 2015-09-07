@@ -26,8 +26,8 @@ We then modify our dependencies within `mix.exs` to include obelisk, as well as 
 library yamerl.
 
     defp deps do
-      [{ :obelisk, "~> 0.7.1" },
-       { :yamerl, github: "yakaz/yamerl"}]
+      [{:obelisk, "~> 0.10"},
+       {:yamerl, github: "yakaz/yamerl"}]
     end
 
 Next we need to download obelisk and compile it
@@ -181,7 +181,7 @@ The asset "pipeline" is extremely simple at this stage. Anything under your `/th
 
 ## Layouts
 
-Everything under the `/themes/$THEME/layout` directory is used to build up your site. You have the option of using either the standard [Elixir templating library, Eex](http://elixir-lang.org/docs/v1.0/eex/), or [haml](http://haml.info/).
+Everything under the `/themes/$THEME/layout` directory is used to build up your site.
 
 Both templating libraries are available out of the box, with no configuration
 required. They can also be both used within the same project.
@@ -190,8 +190,6 @@ Which renderer to use is decided based on the extension of the template file:
 
 * _eex_ will use the eex renderer
 * _html.eex_ will use the eex renderer
-* _haml_ will use the haml renderer
-* _html.haml_ will use the haml renderer
 
 `post.eex` (or similar) is the template which wraps blog post content. The `@content` variable is used within this template to specify the location that the converted markdown content is injected.
 
