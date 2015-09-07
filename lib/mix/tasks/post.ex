@@ -7,7 +7,7 @@ defmodule Mix.Tasks.Obelisk.Post do
 
   ## Arguments
 
-  * Post tit
+  * Post title
 
   ## Usage
 
