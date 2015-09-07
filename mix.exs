@@ -26,7 +26,7 @@ defmodule Obelisk.Mixfile do
      {:cowboy, "~> 1.0"},
      {:plug, "~> 1.0"},
      {:rss, "~> 0.2"},
-     {:mock, "~> 0.1"},
+     {:mock, "~> 0.1"}
     ]
   end
 
@@ -34,7 +34,7 @@ defmodule Obelisk.Mixfile do
     %{
       licenses: ["MIT"],
       contributors: ["Benny Hallett"],
-      links: %{ "Github" => "https://github.com/bennyhallett/obelisk"}
-    }
+      links: %{"Github" => "https://github.com/bennyhallett/obelisk"}
+     }
   end
 end

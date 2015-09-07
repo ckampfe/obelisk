@@ -7,21 +7,21 @@ defmodule StoreTest do
   end
 
   test "Initial posts are empty" do
-    { :ok, store } = Obelisk.Store.start_link
+    {:ok, store} = Obelisk.Store.start_link
 
     posts = Obelisk.Store.get_posts(store)
     assert length(Dict.keys(posts)) == 0
   end
 
   test "Initial pages are empty" do
-    { :ok, store } = Obelisk.Store.start_link
+    {:ok, store} = Obelisk.Store.start_link
 
     pages = Obelisk.Store.get_pages store
     assert length(Dict.keys pages) == 0
   end
 
   test "Layouts are loaded initially" do
-    { :ok, store } = Obelisk.Store.start_link
+    {:ok, store} = Obelisk.Store.start_link
 
     layouts = Obelisk.Store.get_layouts store
     assert Obelisk.Layout.layout == layouts.layout
@@ -30,7 +30,7 @@ defmodule StoreTest do
   end
 
   test "Add posts" do
-    { :ok, store } = Obelisk.Store.start_link
+    {:ok, store} = Obelisk.Store.start_link
     posts = [ "A", "B", "C" ]
     Obelisk.Store.add_posts store, posts
 
@@ -40,7 +40,7 @@ defmodule StoreTest do
   end
 
   test "Add pages" do
-    { :ok, store } = Obelisk.Store.start_link
+    {:ok, store} = Obelisk.Store.start_link
     pages = [ "A", "B", "C" ]
     Obelisk.Store.add_pages store, pages
 

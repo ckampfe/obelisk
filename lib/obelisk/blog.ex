@@ -13,16 +13,16 @@ defmodule Obelisk.Blog do
 
   defp _compile_index([], _, _), do: nil
   defp _compile_index(posts, store, page_num \\ 1) do
-    { ppp, _ } = Integer.parse Obelisk.Config.config.posts_per_page
-    { c, r } = Enum.split(posts, ppp)
+    {ppp, _} = Integer.parse Obelisk.Config.config.posts_per_page
+    {c, r} = Enum.split(posts, ppp)
     write_index_page c, page_num, last_page?(r), store
     _compile_index r, store, page_num + 1
   end
 
   defp write_index_page(posts, page_num, last_page, store) do
     templates = Obelisk.Store.get_layouts(store)
-    { layout, layout_renderer } = templates.layout
-    { index, index_renderer } = templates.index
+    {layout, layout_renderer} = templates.layout
+    {index, index_renderer} = templates.index
     File.write(html_filename(page_num),
       Obelisk.Renderer.render(layout, [js: Obelisk.Assets.js, css: Obelisk.Assets.css, content: Obelisk.Renderer.render(index, [prev: previous_page(page_num), next: next_page(page_num, last_page), content: posts ], index_renderer)], layout_renderer))
   end

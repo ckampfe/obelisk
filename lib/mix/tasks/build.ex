@@ -16,7 +16,7 @@ defmodule Mix.Tasks.Obelisk.Build do
     Obelisk.Theme.ensure
     Obelisk.Assets.copy
 
-    { :ok, store } = Obelisk.Store.start_link
+    {:ok, store} = Obelisk.Store.start_link
     Obelisk.Page.list |> Enum.each &(Obelisk.Page.prepare(&1, store))
     Obelisk.Post.list |> Enum.each &(Obelisk.Post.prepare(&1, store))
 

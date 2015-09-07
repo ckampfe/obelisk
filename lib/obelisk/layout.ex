@@ -33,16 +33,16 @@ defmodule Obelisk.Layout do
 
   defp to_path(filename), do: base_path <> "/" <> filename
 
-  defp read(path), do: { File.read!(path), path }
+  defp read(path), do: {File.read!(path), path}
 
-  defp determine_renderer({ content, path }) do
+  defp determine_renderer({content, path}) do
     renderer = path
     |> String.split(".")
     |> Enum.reverse
     |> hd
     |> String.to_atom
 
-    { content, renderer }
+    {content, renderer}
   end
 
 end

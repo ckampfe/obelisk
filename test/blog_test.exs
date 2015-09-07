@@ -16,22 +16,22 @@ defmodule BlogTest do
   end
 
   test "html filename with single page config is blog.html" do
-    Obelisk.Config.force %{ blog_index: "blog.html" }
+    Obelisk.Config.force %{blog_index: "blog.html"}
     assert "./build/blog.html" == Blog.html_filename(1)
   end
 
   test "html filename with single page 10 config is blog10.html" do
-    Obelisk.Config.force %{ blog_index: "blog.html" }
+    Obelisk.Config.force %{blog_index: "blog.html"}
     assert "./build/blog10.html" == Blog.html_filename(10)
   end
 
   test "html filename with path config is blog/index.html" do
-    Obelisk.Config.force %{ blog_index: "blog/index.html" }
+    Obelisk.Config.force %{blog_index: "blog/index.html"}
     assert "./build/blog/index.html" == Blog.html_filename(1)
   end
 
   test "html filename with path 10 config is blog/index10.html" do
-    Obelisk.Config.force %{ blog_index: "blog/index.html" }
+    Obelisk.Config.force %{blog_index: "blog/index.html"}
     assert "./build/blog/index10.html" == Blog.html_filename(10)
   end
 
@@ -56,37 +56,37 @@ defmodule BlogTest do
   end
 
   test "next page not on last page with single page config" do
-    Obelisk.Config.force %{ blog_index: "blog.html" }
+    Obelisk.Config.force %{blog_index: "blog.html"}
 
     assert "<a href=\"blog3.html\">Next Page</a>" == Blog.next_page(2, false)
   end
 
   test "next page not on last page with path config" do
-    Obelisk.Config.force %{ blog_index: "blog/index.html" }
+    Obelisk.Config.force %{blog_index: "blog/index.html"}
 
     assert "<a href=\"blog/index3.html\">Next Page</a>" == Blog.next_page(2, false)
   end
 
   test "previous page on second with single page config" do
-    Obelisk.Config.force %{ blog_index: "blog.html" }
+    Obelisk.Config.force %{blog_index: "blog.html"}
 
     assert "<a href=\"blog.html\">Previous Page</a>" == Blog.previous_page(2)
   end
 
   test "previous page on second with path config" do
-    Obelisk.Config.force %{ blog_index: "blog/index.html" }
+    Obelisk.Config.force %{blog_index: "blog/index.html"}
 
     assert "<a href=\"blog/index.html\">Previous Page</a>" == Blog.previous_page(2)
   end
 
   test "previous page on fourth with single page config" do
-    Obelisk.Config.force %{ blog_index: "blog.html" }
+    Obelisk.Config.force %{blog_index: "blog.html"}
 
     assert "<a href=\"blog3.html\">Previous Page</a>" == Blog.previous_page(4)
   end
 
   test "previous page on fourth with path config" do
-    Obelisk.Config.force %{ blog_index: "blog/index.html" }
+    Obelisk.Config.force %{blog_index: "blog/index.html"}
 
     assert "<a href=\"blog/index3.html\">Previous Page</a>" == Blog.previous_page(4)
   end

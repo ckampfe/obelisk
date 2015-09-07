@@ -12,7 +12,7 @@ defmodule DocumentTest do
     create_post(10)
     file = "./posts/#{filename(10)}.markdown"
 
-    document = Obelisk.Document.prepare file, { Obelisk.Templates.post_template, :eex }
+    document = Obelisk.Document.prepare file, {Obelisk.Templates.post_template, :eex}
     assert document.frontmatter.title == "This is the heading"
     assert document.frontmatter.description == "This is the desc"
   end

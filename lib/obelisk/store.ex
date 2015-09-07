@@ -54,5 +54,4 @@ defmodule Obelisk.Store do
   def get_layouts(store) do
     Agent.get(store, &HashDict.get(&1, :layouts))
   end
-
 end
