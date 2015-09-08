@@ -21,7 +21,7 @@ defmodule Obelisk.Page do
 
   def filename_from_title(title) do
     titlepart = String.downcase(title) |> String.replace(" ", "-")
-    "./pages/#{titlepart}.markdown"
+    "./pages/#{titlepart}.md"
   end
 
 end

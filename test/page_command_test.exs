@@ -9,8 +9,8 @@ defmodule PageTaskTest do
     Mix.Tasks.Obelisk.Init.run([])
     Mix.Tasks.Obelisk.Page.run([ "An awesome page" ])
 
-    assert File.exists? "./pages/an-awesome-page.markdown"
-    content = File.read! "./pages/an-awesome-page.markdown"
+    assert File.exists? "./pages/an-awesome-page.md"
+    content = File.read! "./pages/an-awesome-page.md"
     assert String.contains? content, "title: An awesome page"
   end
 

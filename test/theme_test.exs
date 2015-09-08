@@ -1,6 +1,5 @@
 defmodule ThemeTest do
   use ExUnit.Case, async: false
-  import Mock
 
   setup do
     on_exit fn -> TestHelper.cleanup end
