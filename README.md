@@ -12,9 +12,6 @@ Static Site Generator written in Elixir.
 obelisk should take advantage of Elixir's multithreaded behaviour to increase this speed.
 * **Simple, Obvious**. It should be very straight forward to add new content and modify the
 way that your site works.
-* **Templatable**. It should be possible to store templates in github repos and reference them
-directly, allowing modification of the look and feel of a site instantaneously with no manual
-installation.
 
 ## Creating a new obelisk project
 
@@ -130,10 +127,7 @@ used at build time is determined by the `theme` setting in `./site.yml`
     theme: default
     ...
 
-### Local Themes
-
-Local themes are those that you have created yourself and not yet shared with
-the world. A new theme can be created by making a new directory under `/themes`
+A new theme can be created by making a new directory under `/themes`
 and including the required files and directories
 
     /themes/<themename>/
@@ -144,36 +138,6 @@ and including the required files and directories
     /themes/<themename>/layout
 
 Enable the theme by selecting it in `site.yml` as shown above.
-
-### Github Themes
-
-If your theme is hosted on [Github](https://github.com) you can have Obelisk
-automatically include that theme for you without having to manually include it
-in your `/themes` directory.
-
-In your `site.yml`, use the `user/repo` form common to Github repositories and
-Obelisk will do the rest when you run `$ mix obelisk build`
-
-    ---
-    theme: "github_user/obelisk_theme"
-    ...
-
->> Note: You'll need a native git client installed to clone the repository. It
->> will also need to be publicly accessible.
-
-### Themes in other Git repositories
-
-If your theme is in a Git repository, but not hosted on Github, never fear.
-Obelisk will still handle your theme. Just include the full url to your theme
-repository and Obelisk will work similarly to the way it does for Github
-repositories.
-
-    ---
-    theme: "http://example.com/user/repo.git"
-    ...
-
->> Note: You'll need a native git client installed to clone the repository. It
->> will also need to be publicly accessible.
 
 ## The asset "pipeline"
 
@@ -207,5 +171,3 @@ Which renderer to use is decided based on the extension of the template file:
     /assets/css/0-reset.css
     /assets/css/1-layout.css
     /assets/css/2-style.css
-
-
