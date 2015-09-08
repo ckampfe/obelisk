@@ -23,5 +23,4 @@ defmodule Obelisk.Config do
 
   defp _load_config({:error, _}), do: {:ok, Obelisk.Templates.config} |> _load_config
   defp _load_config({:ok, content}), do: Obelisk.YamlToDict.convert(%{}, hd(:yamerl_constr.string(content)))
-
 end
