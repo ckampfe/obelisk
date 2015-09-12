@@ -1,5 +1,4 @@
 defmodule Obelisk.Draft do
-
   def compile(md_file) do
     Obelisk.Document.compile "./drafts/#{md_file}", Obelisk.Layout.post
   end
@@ -21,5 +20,4 @@ defmodule Obelisk.Draft do
     titlepart = String.downcase(title) |> String.replace(" ", "-")
     "./drafts/#{datepart}-#{titlepart}.markdown"
   end
-
 end

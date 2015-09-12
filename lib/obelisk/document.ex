@@ -1,5 +1,4 @@
 defmodule Obelisk.Document do
-
   def compile(md_file, {template, renderer}) do
     md = File.read! md_file
     {frontmatter, md_content} = parts md

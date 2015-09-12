@@ -44,5 +44,4 @@ defmodule Obelisk.Layout do
 
     {content, renderer}
   end
-
 end

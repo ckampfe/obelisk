@@ -28,5 +28,4 @@ defmodule Obelisk.Assets do
     |> Enum.map(&("<script type=\"text/javascript\" src=\"#{&1}\"></script>"))
     |> Enum.join("\n")
   end
-
 end

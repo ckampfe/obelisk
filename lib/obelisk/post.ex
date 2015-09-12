@@ -1,5 +1,4 @@
 defmodule Obelisk.Post do
-
   def compile(md_file) do
     spawn_link fn ->
       Obelisk.Document.compile "./posts/#{md_file}", Obelisk.Layout.post
@@ -30,5 +29,4 @@ defmodule Obelisk.Post do
     titlepart = String.downcase(title) |> String.replace(" ", "-")
     "./posts/#{datepart}-#{titlepart}.markdown"
   end
-
 end

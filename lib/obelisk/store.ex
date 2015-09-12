@@ -1,10 +1,9 @@
 defmodule Obelisk.Store do
-
   @doc """
   Start the store
   """
   def start_link do
-    Agent.start_link( fn ->
+    Agent.start_link(fn ->
       store = HashDict.new
       store = HashDict.put(store, :posts, [])
       store = HashDict.put(store, :pages, [])

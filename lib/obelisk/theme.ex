@@ -1,5 +1,4 @@
 defmodule Obelisk.Theme do
-
   @moduledoc """
   Functions to manage themes.
   """

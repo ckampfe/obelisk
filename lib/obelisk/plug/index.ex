@@ -5,7 +5,7 @@ defmodule Obelisk.Plug.Index do
    """
 
    @behaviour Plug
-   
+
    @doc """
    Callback function for `Plug.init/1`.
    """

@@ -1,5 +1,4 @@
 defmodule Obelisk.Page do
-
   def compile(md_file) do
     spawn_link fn ->
       Obelisk.Document.compile "./pages/#{md_file}", Obelisk.Layout.page
@@ -23,5 +22,4 @@ defmodule Obelisk.Page do
     titlepart = String.downcase(title) |> String.replace(" ", "-")
     "./pages/#{titlepart}.md"
   end
-
 end

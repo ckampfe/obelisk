@@ -87,5 +87,4 @@ defmodule Obelisk.Blog do
     |> with_index_num(page_num + 1)
     |> build_link("Next Page")
   end
-
 end

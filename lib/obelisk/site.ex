@@ -1,5 +1,4 @@
 defmodule Obelisk.Site do
-
   def initialize do
     create_default_theme
     create_content_dirs
@@ -40,5 +39,4 @@ defmodule Obelisk.Site do
     File.write "./themes/default/layout/index.eex", Obelisk.Templates.index
     File.write "./themes/default/layout/page.eex", Obelisk.Templates.page_template
   end
-
 end

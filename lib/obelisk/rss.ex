@@ -1,5 +1,4 @@
 defmodule Obelisk.RSS do
-
   def build_feed(posts) do
     config = Obelisk.Config.config
     channel = RSS.channel(
@@ -25,5 +24,4 @@ defmodule Obelisk.RSS do
       url,
       url)
   end
-
 end

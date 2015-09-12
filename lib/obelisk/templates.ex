@@ -1,5 +1,4 @@
 defmodule Obelisk.Templates do
-
   @moduledoc """
   This module contains various templates for building initial files
   for obelisk sites.
@@ -110,5 +109,4 @@ defmodule Obelisk.Templates do
     }
     """
   end
-
 end
