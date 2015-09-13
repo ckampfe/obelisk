@@ -16,10 +16,8 @@ defmodule Mix.Tasks.Obelisk.Server do
     IO.puts "Press <CTRL+C> <CTRL+C> to quit."
     {:ok, pid} = Plug.Adapters.Cowboy.http Obelisk.Plug.Server, []
 
-    wait_til_dead pid
+    unless Code.ensure_loaded?(IEx) && IEx.started? do
+      :timer.sleep(:infinity)
+    end
   end
-
-  defp wait_til_dead(pid), do: _wait_til_dead(pid, Process.alive?(pid))
-  defp _wait_til_dead(pid, true), do: _wait_til_dead(pid, Process.alive?(pid))
-  defp _wait_til_dead(_, _), do: nil
 end
