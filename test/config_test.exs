@@ -17,7 +17,6 @@ defmodule ConfigTest do
     Obelisk.Config.reload
     config = Obelisk.Config.config
     assert "A brand new static site" == config.name
-    assert "default" == config.theme
   end
 
 end

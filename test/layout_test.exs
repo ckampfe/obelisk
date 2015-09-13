@@ -8,70 +8,70 @@ defmodule LayoutTest do
   end
 
   test "load eex layout" do
-    "./themes/default/layout/layout.eex"
+    "./theme/layout/layout.eex"
     |> File.write("layout")
 
-    assert {"layout", :eex} == Obelisk.Layout.layout
+    assert "layout" == Obelisk.Layout.layout
   end
 
   test "load html.eex layout" do
-    "./themes/default/layout/layout.eex"
+    "./theme/layout/layout.eex"
     |> File.rm
 
-    "./themes/default/layout/layout.html.eex"
+    "./theme/layout/layout.html.eex"
     |> File.write("layout")
 
-    assert {"layout", :eex} == Obelisk.Layout.layout
+    assert "layout" == Obelisk.Layout.layout
   end
 
   test "load eex post" do
-    "./themes/default/layout/post.eex"
+    "./theme/layout/post.eex"
     |> File.write("post")
 
-    assert {"post", :eex} == Obelisk.Layout.post
+    assert "post" == Obelisk.Layout.post
   end
 
   test "load html.eex post" do
-    "./themes/default/layout/post.eex"
+    "./theme/layout/post.eex"
     |> File.rm
 
-    "./themes/default/layout/post.html.eex"
+    "./theme/layout/post.html.eex"
     |> File.write("post")
 
-    assert {"post", :eex} == Obelisk.Layout.post
+    assert "post" == Obelisk.Layout.post
   end
 
   test "load eex page" do
-    "./themes/default/layout/page.eex"
+    "./theme/layout/page.eex"
     |> File.write("page")
 
-    assert {"page", :eex} == Obelisk.Layout.page
+    assert "page" == Obelisk.Layout.page
   end
 
   test "load html.eex page" do
-    "./themes/default/layout/page.eex"
+    "./theme/layout/page.eex"
     |> File.rm
 
-    "./themes/default/layout/page.html.eex"
+    "./theme/layout/page.html.eex"
     |> File.write("page")
 
-    assert {"page", :eex} == Obelisk.Layout.page
+    assert "page" == Obelisk.Layout.page
   end
 
   test "load eex index" do
-    "./themes/default/layout/index.eex"
+    "./theme/layout/index.eex"
     |> File.write("index")
 
-    assert {"index", :eex} == Obelisk.Layout.index
+    assert "index" == Obelisk.Layout.index
   end
 
   test "load html.eex index" do
-    "./themes/default/layout/index.eex"
+    "./theme/layout/index.eex"
     |> File.rm
 
-    "./themes/default/layout/index.html.eex"
+    "./theme/layout/index.html.eex"
     |> File.write("index")
 
-    assert {"index", :eex} == Obelisk.Layout.index
+    assert "index" == Obelisk.Layout.index
   end
 end

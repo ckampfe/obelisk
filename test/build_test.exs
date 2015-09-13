@@ -12,7 +12,10 @@ defmodule BuildTaskTest do
     Enum.each(10..15, fn day -> create_post day end)
     Mix.Tasks.Obelisk.Build.run([])
 
-    Enum.each(10..15, fn day -> assert File.exists?("./build/#{filename(day)}.html") end)
+    for day <- 10..15 do
+      post = "build/" <> filename(day) <> ".html"
+      assert File.exists?(post)
+    end
   end
 
   test "Build task compiled pages into the build dir" do
@@ -21,7 +24,10 @@ defmodule BuildTaskTest do
     Enum.each(10..15, fn day -> create_page day end)
     Mix.Tasks.Obelisk.Build.run([])
 
-    Enum.each(10..15, fn day -> assert File.exists?("./build/#{pagename(day)}.html") end)
+    for day <- 10..15 do
+      page = "./build/" <> pagename(day) <> ".html"
+      assert File.exists?(page)
+    end
   end
 
   test "Index page doesnt include next link on last page" do
@@ -46,7 +52,7 @@ defmodule BuildTaskTest do
   test "Config limits items per index page" do
     Mix.Tasks.Obelisk.Init.run []
     Obelisk.Config.reload
-    1..10 |> Enum.each(&(create_post &1))
+    for day <- 1..10, do: create_post day
     File.write("site.yml", """
     ---
     name: My Blog
@@ -107,7 +113,6 @@ defmodule BuildTaskTest do
 
     assert File.exists? "./build/blog/index.html"
     assert File.exists? "./build/blog/index2.html"
-
   end
 
   defp filename(day) do
@@ -119,11 +124,11 @@ defmodule BuildTaskTest do
   end
 
   defp create_post(day) do
-    File.write("./posts/#{filename(day)}.markdown", content)
+    File.write("./posts/#{filename(day)}.md", content)
   end
 
   defp create_page(day) do
-    File.write("./pages/#{pagename(day)}.markdown", content)
+    File.write("./pages/#{pagename(day)}.md", content)
   end
 
   defp content do
@@ -131,7 +136,7 @@ defmodule BuildTaskTest do
     ---
     title: This is the heading
     description: This is the desc
-    created: 2015-01-01
+    created: 2015-01-10
     ---
 
     * And

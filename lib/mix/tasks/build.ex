@@ -13,17 +13,23 @@ defmodule Mix.Tasks.Obelisk.Build do
     Application.start :yamerl
     Obelisk.start(nil, nil)
     Obelisk.Site.clean
-    Obelisk.Theme.ensure
     Obelisk.Assets.copy
 
     {:ok, store} = Obelisk.Store.start_link
-    Obelisk.Page.list |> Enum.each &(Obelisk.Page.prepare(&1, store))
-    Obelisk.Post.list |> Enum.each &(Obelisk.Post.prepare(&1, store))
 
-    Obelisk.Document.write_all Obelisk.Store.get_pages(store)
-    posts = Obelisk.Store.get_posts(store)
-    Obelisk.Document.write_all posts
-    Obelisk.RSS.build_feed posts
-    Obelisk.Blog.compile_index(posts, store)
+    layout = Obelisk.Document.compile_layout
+    index  = Obelisk.Document.compile_index
+    post   = Obelisk.Document.compile_post
+    page   = Obelisk.Document.compile_page
+
+    Obelisk.Page.list |> Enum.each &(Obelisk.Page.prepare(&1, store, layout, page))
+    Obelisk.Post.list |> Enum.each &(Obelisk.Post.prepare(&1, store, layout, post))
+
+    Obelisk.Store.get_pages(store) |> Obelisk.Document.write_all
+    Obelisk.Store.get_posts(store) |> Obelisk.Document.write_all
+
+    Obelisk.Store.get_posts(store) |> Obelisk.RSS.build_feed
+
+    Obelisk.Store.get_posts(store) |> Obelisk.Blog.compile_index(layout, index)
   end
 end

@@ -1,13 +1,15 @@
 defmodule Obelisk.Post do
-  def compile(md_file) do
-    spawn_link fn ->
-      Obelisk.Document.compile "./posts/#{md_file}", Obelisk.Layout.post
-    end
-  end
-
-  def prepare(md_file, store) do
-    layouts = Obelisk.Store.get_layouts(store)
-    Obelisk.Store.add_posts(store, [ Obelisk.Document.prepare("./posts/#{md_file}", layouts.post) ])
+  def prepare(md_file, store, compiled_layout, compiled_post) do
+    Obelisk.Store.add_posts(
+      store,
+      [
+        Obelisk.Document.prepare(
+          "./posts/#{md_file}",
+          compiled_layout,
+          compiled_post
+        )
+      ]
+    )
   end
 
   def title(md) do
@@ -27,6 +29,6 @@ defmodule Obelisk.Post do
   def filename_from_title(title) do
     datepart = Chronos.today |> Chronos.Formatter.strftime("%Y-%0m-%0d")
     titlepart = String.downcase(title) |> String.replace(" ", "-")
-    "./posts/#{datepart}-#{titlepart}.markdown"
+    "./posts/#{datepart}-#{titlepart}.md"
   end
 end

@@ -1,30 +1,54 @@
 defmodule Obelisk.Blog do
   require Integer
 
-  def compile_index(posts, store) do
+  def compile_index(posts, layout_template, index_template) do
     Obelisk.Config.config
     |> Dict.get(:blog_index)
     |> make_path
 
     posts
-    |> Enum.sort(&(&1.frontmatter.created <= &2.frontmatter.created))
-    |> _compile_index(store)
+    |> Enum.sort(&(&1.frontmatter.created >= &2.frontmatter.created))
+    |> do_compile_index(layout_template, index_template)
   end
 
-  defp _compile_index([], _, _), do: nil
-  defp _compile_index(posts, store, page_num \\ 1) do
-    {ppp, _} = Integer.parse Obelisk.Config.config.posts_per_page
-    {c, r} = Enum.split(posts, ppp)
-    write_index_page c, page_num, last_page?(r), store
-    _compile_index r, store, page_num + 1
+  defp do_compile_index([], _, _, _), do: nil
+  defp do_compile_index(posts, layout_template, index_template, page_num \\ 1) do
+    {posts_per_page, _} = Integer.parse Obelisk.Config.config.posts_per_page
+    {current, remaining} = Enum.split(posts, posts_per_page)
+    write_index_page(
+      current,
+      layout_template,
+      index_template,
+      page_num,
+      last_page?(remaining)
+    )
+
+    do_compile_index(remaining, layout_template, index_template, page_num + 1)
   end
 
-  defp write_index_page(posts, page_num, last_page, store) do
-    templates = Obelisk.Store.get_layouts(store)
-    {layout, layout_renderer} = templates.layout
-    {index, index_renderer} = templates.index
-    File.write(html_filename(page_num),
-      Obelisk.Renderer.render(layout, [js: Obelisk.Assets.js, css: Obelisk.Assets.css, content: Obelisk.Renderer.render(index, [prev: previous_page(page_num), next: next_page(page_num, last_page), content: posts ], index_renderer)], layout_renderer))
+  defp write_index_page(posts, layout_template, index_template, page_num, last_page) do
+    index = Obelisk.Document.bind_template(
+      index_template,
+      assigns: [
+        content: posts,
+        prev: previous_page(page_num),
+        next: next_page(page_num, last_page)
+      ]
+    )
+
+    layout = Obelisk.Document.bind_template(
+      layout_template,
+      assigns: [
+        css: Obelisk.Assets.css,
+        js: Obelisk.Assets.js,
+        content: index
+      ]
+    )
+
+    File.write(
+      html_filename(page_num),
+      layout
+    )
   end
 
   defp last_page?([]), do: true

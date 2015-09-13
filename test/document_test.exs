@@ -10,20 +10,21 @@ defmodule DocumentTest do
     Mix.Tasks.Obelisk.Init.run []
     Mix.Tasks.Obelisk.Build.run []
     create_post(10)
-    file = "./posts/#{filename(10)}.markdown"
+    file = "./posts/#{filename(10)}.md"
 
-    document = Obelisk.Document.prepare file, {Obelisk.Templates.post_template, :eex}
+    layout = Obelisk.Document.compile_layout
+    page   = Obelisk.Document.compile_page
+
+    document = Obelisk.Document.prepare file, layout, page
     assert document.frontmatter.title == "This is the heading"
     assert document.frontmatter.description == "This is the desc"
   end
 
   test "file name for post" do
-    assert "post.html" == Obelisk.Document.file_name("path/to/post.markdown")
     assert "post.html" == Obelisk.Document.file_name("path/to/post.md")
   end
 
   test "html filename with default config" do
-    assert "./build/post.html" == Obelisk.Document.html_filename("path/to/post.markdown")
     assert "./build/post.html" == Obelisk.Document.html_filename("path/to/post.md")
   end
 
@@ -32,7 +33,7 @@ defmodule DocumentTest do
   end
 
   defp create_post(day) do
-    File.write("./posts/#{filename(day)}.markdown", content)
+    File.write("./posts/#{filename(day)}.md", content)
   end
 
   defp content do
@@ -40,6 +41,7 @@ defmodule DocumentTest do
     ---
     title: This is the heading
     description: This is the desc
+    created: 2014-01-10
     ---
 
     * And

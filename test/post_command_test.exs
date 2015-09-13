@@ -10,8 +10,8 @@ defmodule PostTaskTest do
     Mix.Tasks.Obelisk.Init.run([])
     Mix.Tasks.Obelisk.Post.run([ "An awesome post" ])
 
-    assert File.exists? "./posts/#{TestHelper.datepart}-an-awesome-post.markdown"
-    content = File.read! "./posts/#{TestHelper.datepart}-an-awesome-post.markdown"
+    assert File.exists? "./posts/#{TestHelper.datepart}-an-awesome-post.md"
+    content = File.read! "./posts/#{TestHelper.datepart}-an-awesome-post.md"
     assert String.contains? content, "title: An awesome post"
   end
 
@@ -20,8 +20,8 @@ defmodule PostTaskTest do
       Mix.Tasks.Obelisk.Init.run([])
       Mix.Tasks.Obelisk.Post.run(["Dates should be in frontmatter"])
 
-      assert File.exists? "./posts/2015-01-01-dates-should-be-in-frontmatter.markdown"
-      content = File.read! "./posts/2015-01-01-dates-should-be-in-frontmatter.markdown"
+      assert File.exists? "./posts/2015-01-01-dates-should-be-in-frontmatter.md"
+      content = File.read! "./posts/2015-01-01-dates-should-be-in-frontmatter.md"
       assert String.contains? content, "created: 2015-01-01 10:10:10"
     end
   end

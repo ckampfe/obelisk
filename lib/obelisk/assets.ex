@@ -1,7 +1,5 @@
 defmodule Obelisk.Assets do
-  alias Obelisk.Theme
-
-  def copy, do: File.cp_r("./themes/#{Theme.current}/assets", "./build/assets")
+  def copy, do: File.cp_r("./theme/assets", "./build/assets")
 
   def css_files do
     File.ls!("./build/assets/css")
