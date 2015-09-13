@@ -1,15 +1,19 @@
 defmodule Obelisk.Page do
-  def prepare(md_file, store, compiled_layout, compiled_page) do
-    Obelisk.Store.add_pages(
-      store,
-      [
-        Obelisk.Document.prepare(
-          "./pages/#{md_file}",
-          compiled_layout,
-          compiled_page
-        )
-      ]
+  def prepare(md_file, compiled_layout, compiled_page) do
+    Obelisk.Document.prepare(
+      "./pages/#{md_file}",
+      compiled_layout,
+      compiled_page
     )
+  end
+
+  def write(page) do
+    File.write(
+      page.path,
+      page.document
+    )
+
+    page
   end
 
   def list do

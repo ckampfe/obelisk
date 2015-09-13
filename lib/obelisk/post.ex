@@ -1,19 +1,26 @@
 defmodule Obelisk.Post do
-  def prepare(md_file, store, compiled_layout, compiled_post) do
-    Obelisk.Store.add_posts(
-      store,
-      [
-        Obelisk.Document.prepare(
-          "./posts/#{md_file}",
-          compiled_layout,
-          compiled_post
-        )
-      ]
+  def prepare(md_file, compiled_layout, compiled_post) do
+    Obelisk.Document.prepare(
+      "./posts/#{md_file}",
+      compiled_layout,
+      compiled_post
     )
   end
 
+  def write(post) do
+    File.write(
+      post.path,
+      post.document
+    )
+
+    post
+  end
+
   def title(md) do
-    String.capitalize(String.replace(String.replace(String.slice(md, 11, 1000), "-", " "), ".markdown", ""))
+    String.slice(md, 11, 1000)
+    |> String.replace("-", " ")
+    |> String.replace(".markdown", "")
+    |> String.capitalize
   end
 
   def list do

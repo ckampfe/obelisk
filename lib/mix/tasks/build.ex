@@ -15,21 +15,69 @@ defmodule Mix.Tasks.Obelisk.Build do
     Obelisk.Site.clean
     Obelisk.Assets.copy
 
-    {:ok, store} = Obelisk.Store.start_link
+    {
+      layout_template,
+      index_template,
+      post_template,
+      page_template
+    } = compile_templates
 
-    layout = Obelisk.Document.compile_layout
-    index  = Obelisk.Document.compile_index
-    post   = Obelisk.Document.compile_post
-    page   = Obelisk.Document.compile_page
+    Obelisk.Page.list
+    |> Enum.map(fn page ->
+      Task.Supervisor.async(
+        Obelisk.RenderSupervisor,
+        Obelisk.Page,
+        :prepare,
+        [page, layout_template, page_template]
+      )
+    end)
+    |> Enum.map(&Task.await(&1, 20000))
+    |> Enum.map(fn page ->
+      Task.Supervisor.async(
+        Obelisk.RenderSupervisor,
+        Obelisk.Page,
+        :write,
+        [page]
+      )
+    end)
+    |> Enum.map(&Task.await(&1, 20000))
 
-    Obelisk.Page.list |> Enum.each &(Obelisk.Page.prepare(&1, store, layout, page))
-    Obelisk.Post.list |> Enum.each &(Obelisk.Post.prepare(&1, store, layout, post))
+    posts_frontmatter =
+      Obelisk.Post.list
+      |> Enum.map(fn post ->
+        Task.Supervisor.async(
+          Obelisk.RenderSupervisor,
+          Obelisk.Post,
+          :prepare,
+          [post, layout_template, post_template]
+        )
+      end)
+      |> Enum.map(&Task.await(&1, 20000))
+      |> Enum.map(fn post ->
+        Task.Supervisor.async(
+          Obelisk.RenderSupervisor,
+          Obelisk.Post,
+          :write,
+          [post]
+        )
+      end)
+      |> Enum.map(&Task.await(&1, 20000))
 
-    Obelisk.Store.get_pages(store) |> Obelisk.Document.write_all
-    Obelisk.Store.get_posts(store) |> Obelisk.Document.write_all
+    Obelisk.RSS.build_feed(posts_frontmatter)
 
-    Obelisk.Store.get_posts(store) |> Obelisk.RSS.build_feed
+    Obelisk.Blog.compile_index(
+      posts_frontmatter,
+      layout_template,
+      index_template
+    )
+  end
 
-    Obelisk.Store.get_posts(store) |> Obelisk.Blog.compile_index(layout, index)
+  defp compile_templates do
+    {
+      Obelisk.Document.compile_layout,
+      Obelisk.Document.compile_index,
+      Obelisk.Document.compile_post,
+      Obelisk.Document.compile_page
+    }
   end
 end
