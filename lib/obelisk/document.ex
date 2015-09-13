@@ -1,25 +1,60 @@
 defmodule Obelisk.Document do
-  def compile(md_file, {template, renderer}) do
-    md = File.read! md_file
-    {frontmatter, md_content} = parts md
-    fm = Obelisk.FrontMatter.parse frontmatter
-    {layout_template, layout_renderer} = Obelisk.Layout.layout
-    File.write(html_filename(md_file),
-      Obelisk.Renderer.render(layout_template, [js: Obelisk.Assets.js, css: Obelisk.Assets.css, content: Obelisk.Renderer.render(template, [content: Earmark.to_html(md_content), frontmatter: fm], renderer)], layout_renderer))
+  require EEx
+
+  def compile_layout do
+    EEx.compile_file "./theme/layout/layout.eex"
   end
 
-  def prepare(md_file, {template, renderer}) do
-    md = File.read! md_file
-    {frontmatter, md_content} = parts md
-    fm = Obelisk.FrontMatter.parse frontmatter
-    content = Obelisk.Renderer.render(template, [ content: Earmark.to_html(md_content), frontmatter: fm, filename: file_name(md_file) ], renderer)
-    assigns = [ js:       Obelisk.Assets.js,
-                css:      Obelisk.Assets.css,
-                content:  content
-              ]
-    {layout_template, layout_renderer} = Obelisk.Layout.layout
-    document = Obelisk.Renderer.render(layout_template, assigns, layout_renderer)
-    %{frontmatter: fm, content: content, document: document, path: html_filename(md_file), filename: file_name(md_file)}
+  def compile_index do
+    EEx.compile_file "./theme/layout/index.eex"
+  end
+
+  def compile_post do
+    EEx.compile_file "./theme/layout/post.eex"
+  end
+
+  def compile_page do
+    EEx.compile_file "./theme/layout/page.eex"
+  end
+
+  def bind_template(compiled, bindings, options \\ []) do
+    {result, _} = Code.eval_quoted(compiled, bindings, options)
+    result
+  end
+
+  def prepare(md_file, layout, inner) do
+    {yaml_frontmatter, content} =
+      md_file
+      |> File.read!
+      |> parts
+
+    frontmatter = Obelisk.FrontMatter.parse(yaml_frontmatter)
+
+    compiled_content = bind_template(
+      inner,
+      assigns: [
+        content: Earmark.to_html(content),
+        frontmatter: frontmatter,
+        filename: file_name(md_file)
+      ]
+    )
+
+    compiled_document = bind_template(
+      layout,
+      assigns: [
+        css: Obelisk.Assets.css,
+        js: Obelisk.Assets.js,
+        content: compiled_content
+      ]
+    )
+
+    %{
+      frontmatter: frontmatter,
+      content: compiled_content,
+      document: compiled_document,
+      path: html_filename(md_file),
+      filename: file_name(md_file)
+    }
   end
 
   def write_all(pages) do
@@ -60,6 +95,6 @@ defmodule Obelisk.Document do
   def filename_from_title(title) do
     datepart = Chronos.today |> Chronos.Formatter.strftime("%Y-%0m-%0d")
     titlepart = String.downcase(title) |> String.replace(" ", "-")
-    "./posts/#{datepart}-#{titlepart}.markdown"
+    "./posts/#{datepart}-#{titlepart}.md"
   end
 end
