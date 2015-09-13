@@ -35,7 +35,6 @@ defmodule Obelisk.Templates do
     description: This is my blog about things
     language: en-us
     posts_per_page: 10
-    theme: default
     """
   end
 
@@ -86,7 +85,7 @@ defmodule Obelisk.Templates do
     <div class="index">
       <%= Enum.map @content, fn(post) ->
         \"\"\"
-        #\{post.content}
+        #\{post.filename}
         <hr />
         \"\"\"
       end %>

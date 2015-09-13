@@ -6,10 +6,10 @@ defmodule Mix.Tasks.Perf do
   Runs obelisk performance benchmarks.
   """
   def run(_) do
-    Obelisk.Tasks.Init.run([])
+    Mix.Tasks.Obelisk.Init.run([])
     make_10k_posts
     IO.puts Chronos.Formatter.strftime(Chronos.now, "%Y-%0m-%0d-%H:%M:%S")
-    Obelisk.Tasks.Build.run([])
+    Mix.Tasks.Obelisk.Build.run([])
     IO.puts Chronos.Formatter.strftime(Chronos.now, "%Y-%0m-%0d-%H:%M:%S")
     cleanup
   end
@@ -20,11 +20,11 @@ defmodule Mix.Tasks.Perf do
 
   defp filename(num) do
     today = Chronos.today
-    "#{Chronos.Formatter.strftime today, "%y-%0m-%0d"}-post-#{num}.markdown"
+    "#{Chronos.Formatter.strftime today, "%y-%0m-%0d"}-post-#{num}"
   end
 
   defp create_post(num) do
-    File.write("./posts/#{filename(num)}.markdown", content)
+    File.write("./posts/#{filename(num)}.md", content)
   end
 
   defp content do
@@ -32,6 +32,7 @@ defmodule Mix.Tasks.Perf do
     ---
     title: Something
     description: A bunch of lorem ipsums
+    created: "2015-09-11"
     ---
 
     This is the heading

@@ -12,18 +12,18 @@ defmodule Obelisk.Site do
   end
 
   def create_default_theme do
-    File.mkdir "./themes"
-    File.mkdir "./themes/default"
+    File.mkdir "./theme"
+    File.mkdir "./theme"
     create_assets_dirs
     create_layout_dirs
   end
 
   defp create_assets_dirs do
-    File.mkdir "./themes/default/assets"
-    File.mkdir "./themes/default/assets/css"
-    File.mkdir "./themes/default/assets/js"
-    File.mkdir "./themes/default/assets/img"
-    File.write "./themes/default/assets/css/base.css", Obelisk.Templates.base_css
+    File.mkdir "./theme/assets"
+    File.mkdir "./theme/assets/css"
+    File.mkdir "./theme/assets/js"
+    File.mkdir "./theme/assets/img"
+    File.write "./theme/assets/css/base.css", Obelisk.Templates.base_css
   end
 
   defp create_content_dirs do
@@ -33,10 +33,10 @@ defmodule Obelisk.Site do
   end
 
   defp create_layout_dirs do
-    File.mkdir "./themes/default/layout"
-    File.write "./themes/default/layout/post.eex", Obelisk.Templates.post_template
-    File.write "./themes/default/layout/layout.eex", Obelisk.Templates.layout
-    File.write "./themes/default/layout/index.eex", Obelisk.Templates.index
-    File.write "./themes/default/layout/page.eex", Obelisk.Templates.page_template
+    File.mkdir "./theme/layout"
+    File.write "./theme/layout/post.eex", Obelisk.Templates.post_template
+    File.write "./theme/layout/layout.eex", Obelisk.Templates.layout
+    File.write "./theme/layout/index.eex", Obelisk.Templates.index
+    File.write "./theme/layout/page.eex", Obelisk.Templates.page_template
   end
 end

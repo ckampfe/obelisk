@@ -9,9 +9,9 @@ defmodule AssetsTest do
   test "List out css files" do
     Mix.Tasks.Obelisk.Init.run([])
     Obelisk.Config.reload
-    File.touch "./themes/default/assets/css/one.css"
-    File.touch "./themes/default/assets/css/two.css"
-    File.touch "./themes/default/assets/css/three.css"
+    File.touch "./theme/assets/css/one.css"
+    File.touch "./theme/assets/css/two.css"
+    File.touch "./theme/assets/css/three.css"
     Mix.Tasks.Obelisk.Build.run([])
 
     files = Obelisk.Assets.css_files
@@ -25,7 +25,7 @@ defmodule AssetsTest do
   test "List of css files should not include directories" do
     Mix.Tasks.Obelisk.Init.run([])
     Obelisk.Config.reload
-    File.mkdir "./themes/default/assets/css/folder"
+    File.mkdir "./theme/assets/css/folder"
     Mix.Tasks.Obelisk.Build.run([])
 
     files = Obelisk.Assets.css_files
@@ -36,7 +36,7 @@ defmodule AssetsTest do
   test "List out js files" do
     Mix.Tasks.Obelisk.Init.run([])
     Obelisk.Config.reload
-    File.touch "./themes/default/assets/js/one.js"
+    File.touch "./theme/assets/js/one.js"
     Mix.Tasks.Obelisk.Build.run([])
 
     files = Obelisk.Assets.js_files
@@ -47,8 +47,8 @@ defmodule AssetsTest do
   test "List of js files should not include directories" do
     Mix.Tasks.Obelisk.Init.run([])
     Obelisk.Config.reload
-    File.touch "./themes/default/assets/js/one.js"
-    File.mkdir "./themes/default/assets/js/folder"
+    File.touch "./theme/assets/js/one.js"
+    File.mkdir "./theme/assets/js/folder"
     Mix.Tasks.Obelisk.Build.run([])
 
     files = Obelisk.Assets.js_files
@@ -68,7 +68,7 @@ defmodule AssetsTest do
   test "Get html to load js" do
     Mix.Tasks.Obelisk.Init.run([])
     Obelisk.Config.reload
-    File.touch "./themes/default/assets/js/one.js"
+    File.touch "./theme/assets/js/one.js"
     Mix.Tasks.Obelisk.Build.run([])
 
     js_links = Obelisk.Assets.js
