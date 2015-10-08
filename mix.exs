@@ -39,7 +39,7 @@ defmodule Obelisk.Mixfile do
     %{
       licenses: ["MIT"],
       contributors: ["Benny Hallett", "Clark Kampfe"],
-      links: %{"Github" => "https://github.com/bennyhallett/obelisk"}
+      links: %{"Github" => "https://github.com/ckampfe/obelisk"}
      }
   end
 end
