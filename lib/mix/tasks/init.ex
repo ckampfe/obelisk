@@ -9,6 +9,8 @@ defmodule Mix.Tasks.Obelisk.Init do
   None.
   """
 
+  @shortdoc "Create a new Obelisk project"
+
   def run(_) do
     Obelisk.Site.initialize
   end

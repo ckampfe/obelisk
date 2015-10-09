@@ -14,6 +14,8 @@ defmodule Mix.Tasks.Obelisk.Draft do
       $ mix obelisk draft "Still working on this"
   """
 
+  @shortdoc "Create a draft post"
+
   @doc """
   Run the draft task
   """

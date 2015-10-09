@@ -9,6 +9,8 @@ defmodule Mix.Tasks.Obelisk.Server do
   None.
   """
 
+  @shortdoc "Start a server to preview your static site locally"
+
   def run(_) do
     Application.start :cowboy
     Application.start :plug

@@ -1,10 +1,12 @@
-defmodule Mix.Tasks.Perf do
+defmodule Mix.Tasks.Obelisk.Perf do
   use Mix.Task
 
-  @shortdoc "Run obelisk performance benchmarks."
   @moduledoc """
   Runs obelisk performance benchmarks.
   """
+
+  @shortdoc "Run obelisk performance benchmarks"
+
   def run(_) do
     Mix.Tasks.Obelisk.Init.run([])
     make_10k_posts

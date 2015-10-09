@@ -9,6 +9,8 @@ defmodule Mix.Tasks.Obelisk.Build do
   None.
   """
 
+  @shortdoc "Build the static site"
+
   def run(_) do
     Application.start :yamerl
     Obelisk.start(nil, nil)

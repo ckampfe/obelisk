@@ -14,6 +14,8 @@ defmodule Mix.Tasks.Obelisk.Page do
       $ mix obelisk page "This one wierd trick"
   """
 
+  @shortdoc "Create a new page"
+
   @doc """
   Run the build task
   """

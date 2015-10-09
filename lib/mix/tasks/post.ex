@@ -14,6 +14,8 @@ defmodule Mix.Tasks.Obelisk.Post do
       $ mix obelisk post "This one wierd trick"
   """
 
+  @shortdoc "Create a new post"
+
   @doc """
   Run the build task
   """
