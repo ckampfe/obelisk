@@ -3,9 +3,8 @@ defmodule Obelisk.Mixfile do
 
   def project do
     [app: :obelisk,
-     version: "0.11.0",
-     elixir: ">= 1.0.0",
-     elixirc_paths: elixirc_paths(Mix.env),
+     version: "0.10.2",
+     elixir: "~> 1.0",
      package: package,
      docs: [readme: true, main: "README.md"],
      description: """
@@ -24,22 +23,18 @@ defmodule Obelisk.Mixfile do
     [{:yamerl, github: "yakaz/yamerl"},
      {:earmark, "~> 0.1"},
      {:chronos, "~> 1.0"},
-     {:rss,     "~> 0.2"},
-     {:cowboy,  "~> 1.0", only: [:dev, :test]},
-     {:plug,    "~> 1.0", only: [:dev, :test]},
-     {:mock,    "~> 0.1", only: [:test]}
+     {:cowboy, "~> 1.0"},
+     {:plug, "~> 1.0"},
+     {:rss, "~> 0.2"},
+     {:mock, "~> 0.1"}
     ]
   end
-
-  defp elixirc_paths(:test), do: ["lib", "web"]
-  defp elixirc_paths(:dev),  do: ["lib", "web"]
-  defp elixirc_paths(_),     do: ["lib"]
 
   defp package do
     %{
       licenses: ["MIT"],
-      contributors: ["Benny Hallett", "Clark Kampfe"],
-      links: %{"Github" => "https://github.com/ckampfe/obelisk"}
+      contributors: ["Benny Hallett"],
+      links: %{"Github" => "https://github.com/bennyhallett/obelisk"}
      }
   end
 end
