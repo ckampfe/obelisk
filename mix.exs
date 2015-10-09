@@ -3,7 +3,7 @@ defmodule Obelisk.Mixfile do
 
   def project do
     [app: :obelisk,
-     version: "0.10.2",
+     version: "0.10.3",
      elixir: "~> 1.0",
      package: package,
      docs: [readme: true, main: "README.md"],
@@ -26,14 +26,14 @@ defmodule Obelisk.Mixfile do
      {:cowboy, "~> 1.0"},
      {:plug, "~> 1.0"},
      {:rss, "~> 0.2"},
-     {:mock, "~> 0.1"}
+     {:mock, "~> 0.1", only: :test}
     ]
   end
 
   defp package do
     %{
       licenses: ["MIT"],
-      contributors: ["Benny Hallett"],
+      contributors: ["Benny Hallett", "Clark Kampfe"],
       links: %{"Github" => "https://github.com/bennyhallett/obelisk"}
      }
   end
