@@ -25,44 +25,17 @@ defmodule Mix.Tasks.Obelisk.Build do
     } = compile_templates
 
     Obelisk.Page.list
-    |> Enum.map(fn page ->
-      Task.Supervisor.async(
-        Obelisk.RenderSupervisor,
-        Obelisk.Page,
-        :prepare,
-        [page, layout_template, page_template]
-      )
-    end)
+    |> Enum.map(&prepare_async(Obelisk.Page, &1, layout_template, page_template))
     |> Enum.map(&Task.await(&1, 20000))
-    |> Enum.map(fn page ->
-      Task.Supervisor.async(
-        Obelisk.RenderSupervisor,
-        Obelisk.Page,
-        :write,
-        [page]
-      )
-    end)
+    |> Enum.map(&write_async(Obelisk.Page, &1))
     |> Enum.map(&Task.await(&1, 20000))
+
 
     posts_frontmatter =
       Obelisk.Post.list
-      |> Enum.map(fn post ->
-        Task.Supervisor.async(
-          Obelisk.RenderSupervisor,
-          Obelisk.Post,
-          :prepare,
-          [post, layout_template, post_template]
-        )
-      end)
+      |> Enum.map(&prepare_async(Obelisk.Post, &1, layout_template, post_template))
       |> Enum.map(&Task.await(&1, 20000))
-      |> Enum.map(fn post ->
-        Task.Supervisor.async(
-          Obelisk.RenderSupervisor,
-          Obelisk.Post,
-          :write,
-          [post]
-        )
-      end)
+      |> Enum.map(&write_async(Obelisk.Post, &1))
       |> Enum.map(&Task.await(&1, 20000))
 
     Obelisk.RSS.build_feed(posts_frontmatter)
@@ -71,6 +44,24 @@ defmodule Mix.Tasks.Obelisk.Build do
       posts_frontmatter,
       layout_template,
       index_template
+    )
+  end
+
+  defp prepare_async(kind, item, layout_template, kind_template) do
+    Task.Supervisor.async(
+      Obelisk.RenderSupervisor,
+      kind,
+      :prepare,
+      [item, layout_template, kind_template]
+    )
+  end
+
+  defp write_async(kind, item) do
+    Task.Supervisor.async(
+      Obelisk.RenderSupervisor,
+      kind,
+      :write,
+      [item]
     )
   end
 
