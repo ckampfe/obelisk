@@ -24,18 +24,8 @@ defmodule Mix.Tasks.Obelisk.Build do
       page_template
     } = compile_templates
 
-    Obelisk.Page.list
-    |> Enum.map(&prepare_async(Obelisk.Page, &1, layout_template, page_template))
-    |> Enum.map(&Task.await(&1, 20000))
-    |> Enum.map(&write_async(Obelisk.Page, &1))
-    |> Enum.map(&Task.await(&1, 20000))
-
-    posts_frontmatter =
-      Obelisk.Post.list
-      |> Enum.map(&prepare_async(Obelisk.Post, &1, layout_template, post_template))
-      |> Enum.map(&Task.await(&1, 20000))
-      |> Enum.map(&write_async(Obelisk.Post, &1))
-      |> Enum.map(&Task.await(&1, 20000))
+    _ = prepare_and_write(Obelisk.Page, {layout_template, page_template})
+    posts_frontmatter = prepare_and_write(Obelisk.Post, {layout_template, post_template})
 
     Obelisk.RSS.build_feed(posts_frontmatter)
 
@@ -44,6 +34,14 @@ defmodule Mix.Tasks.Obelisk.Build do
       layout_template,
       index_template
     )
+  end
+
+  defp prepare_and_write(kind, {layout_template, kind_template}) do
+    kind.list
+    |> Enum.map(&prepare_async(kind, &1, layout_template, kind_template))
+    |> Enum.map(&Task.await(&1, 20000))
+    |> Enum.map(&write_async(kind, &1))
+    |> Enum.map(&Task.await(&1, 20000))
   end
 
   defp prepare_async(kind, item, layout_template, kind_template) do
