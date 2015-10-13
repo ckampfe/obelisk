@@ -3,16 +3,6 @@ obelisk
 
 Static Site Generator written in Elixir.
 
-[![Build Status](https://travis-ci.org/BennyHallett/obelisk.svg?branch=master)](https://travis-ci.org/BennyHallett/obelisk)
-[![Package](http://img.shields.io/hexpm/v/obelisk.svg)](https://hex.pm/packages/obelisk)
-
-## Goals
-
-* **Fast**. Static websites can take a long time to generate when they start to grow large.
-obelisk should take advantage of Elixir's multithreaded behaviour to increase this speed.
-* **Simple, Obvious**. It should be very straight forward to add new content and modify the
-way that your site works.
-
 ## Creating a new obelisk project
 
 To create a new obelisk project, we use `mix`
@@ -23,7 +13,7 @@ We then modify our dependencies within `mix.exs` to include obelisk, as well as 
 library yamerl.
 
     defp deps do
-      [{:obelisk, "~> 0.10"},
+      [{:obelisk, github: "ckampfe/obelisk"},
        {:yamerl, github: "yakaz/yamerl"}]
     end
 
@@ -32,128 +22,81 @@ Next we need to download obelisk and compile it
     $ mix deps.get
     $ mix deps.compile
 
-Now for the fun stuff, we can initialize our obelisk project
+Initialize a project with:
 
-    $ mix obelisk init
+    $ mix obelisk.init
 
-We can build our obelisk project now. It will look pretty basic without modifications to the layout
-(explained below), and some content.
+Build the project with:
 
-    $ mix obelisk build
+    $ mix obelisk.build
 
 Once our project is built, we can check it out by starting the server.
 
-    $ mix obelisk server
+    $ mix obelisk.server
 
 Now browse to `http://localhost:4000`
 
 ## Structure
 
-Now that we've got our project, you will notice that an obelisk project is set
-out with the following structure
-
     /
     /site.yml
-    /themes/
-    /themes/default/
-    /themes/default/assets/
-    /themes/default/assets/css/
-    /themes/default/assets/js/
-    /themes/default/assets/img/
-    /themes/default/layout
+    /theme/
+    /theme/assets/
+    /theme/assets/css/
+    /theme/assets/js/
+    /theme/assets/img/
+    /theme/layout
     /posts/
     /drafts/
     /pages/
 
 ## Creating a new post
 
-Obelisk expects blog post content to be located in the `/posts` directory, with filenames using the format `YYYY-mm-dd-post-title.markdown`. Any file matching this pattern will be processed and built into the `/build` directory.
+Obelisk expects blog post content to be located in the `/posts` directory, with filenames using the format `YYYY-mm-dd-post-title.md`. Any file matching this pattern will be processed and built into the `/build` directory.
 
 You can use the `post` command to quickly create a new post with todays date, although creating the file manually will also work.
 
-    $ mix obelisk post "New obelisk feature"
+    $ mix obelisk.post "New obelisk feature"
 
 ## Creating a draft
 
-Just like the post above us, we can create a draft. Drafts are intended to hold works in progress, and won't be compiled into the `/build` directory when running the build command.
+Drafts are intended to hold works in progress, and won't be compiled into the `/build` directory when running the build command. Create one like so:
 
-Again, the `draft` command can be used to quickly create a new draft, although creating the file manually will also work.
-
-    $ mix obelisk draft "Still working on this"
+    $ mix obelisk.draft "Still working on this"
 
 ## Creating a page
 
-Pages are non-temporal content, such as an about page, which are built in the same way as posts, but not included in the site's RSS feed. These files can have any name, and need not start with a date stamp. For example `./pages/about-me.markdown` is a fine filename to use.
+Pages are non-temporal content, such as an about page, which are built in the same way as posts, but not included in the site's RSS feed. These files can have any name, and need not start with a date stamp. For example `./pages/about-me.md` is a fine filename to use.
 
-Currently there is no command to create a page, however creating a file under `./pages` will work.
+    $ mix obelisk.page "About Me"
 
 ## Front matter
 
 Like other static site generators, posts should include front matter at the top of each file.
 
     ---
+    layout: post
     title: My brand new blog post
-    img: relative/path/to/bobby.png
-    author: Bobby Tables
-    twitter: littlebobbytables
+    created: 2015-10-12
     ---
 
     Post content goes here
 
 Now within the `post.eex` template, which we'll talk about a bit further down, we can access these value like this:
 
-    <div class="author">
-      <a href="http://twitter.com/#{@frontmatter.twitter}">
-        <img src="#{@frontmatter.img}" />
-        <%= @frontmatter.author %>
-      </a>
+    <div class="post">
+      <h1><%= @frontmatter.title %></h1>
+      <h3><%= @frontmatter.created %></h3>
+      Body text here!
     </div>
 
-## Themes
+## The asset pipeline
 
-Since Obelisk v0.9.0, you are now able to customize your site with various
-themes. These themes are stored in the `/themes/` directory, each in their own
-individual directory.
-
-After the init task is run, you will have access to the default theme, in:
-
-    /themes/default/
-
-You can have multiple themes under the `themes` directory. The theme which is
-used at build time is determined by the `theme` setting in `./site.yml`
-
-    ---
-    ...
-    theme: default
-    ...
-
-A new theme can be created by making a new directory under `/themes`
-and including the required files and directories
-
-    /themes/<themename>/
-    /themes/<themename>/assets/
-    /themes/<themename>/assets/css/
-    /themes/<themename>/assets/js/
-    /themes/<themename>/assets/img/
-    /themes/<themename>/layout
-
-Enable the theme by selecting it in `site.yml` as shown above.
-
-## The asset "pipeline"
-
-The asset "pipeline" is extremely simple at this stage. Anything under your `/themes/$THEME/assets` directory is copied to `/build/assets` when the `mix obelisk build` task is run.
+The asset pipeline is extremely simple at this stage. Anything under your `/theme/assets` directory is copied to `/build/assets` when the `mix obelisk.build` task is run.
 
 ## Layouts
 
-Everything under the `/themes/$THEME/layout` directory is used to build up your site.
-
-Both templating libraries are available out of the box, with no configuration
-required. They can also be both used within the same project.
-
-Which renderer to use is decided based on the extension of the template file:
-
-* _eex_ will use the eex renderer
-* _html.eex_ will use the eex renderer
+Everything under the `/theme/layout` directory is used to build up your site.
 
 `post.eex` (or similar) is the template which wraps blog post content. The `@content` variable is used within this template to specify the location that the converted markdown content is injected.
 
