@@ -45,20 +45,19 @@ defmodule Mix.Tasks.Obelisk.Build do
   end
 
   defp prepare_async(kind, item, layout_template, kind_template) do
-    Task.Supervisor.async(
-      Obelisk.RenderSupervisor,
-      kind,
-      :prepare,
-      [item, layout_template, kind_template]
-    )
+    do_async_supervised(kind, :prepare, [item, layout_template, kind_template])
   end
 
   defp write_async(kind, item) do
+    do_async_supervised(kind, :write, [item])
+  end
+
+  defp do_async_supervised(kind, fun, args) do
     Task.Supervisor.async(
       Obelisk.RenderSupervisor,
       kind,
-      :write,
-      [item]
+      fun,
+      args
     )
   end
 
