@@ -1,7 +1,7 @@
 %{"chronos": {:hex, :chronos, "1.5.1"},
   "cowboy": {:hex, :cowboy, "1.0.3"},
   "cowlib": {:hex, :cowlib, "1.0.1"},
-  "earmark": {:hex, :earmark, "0.1.17"},
+  "earmark": {:hex, :earmark, "0.1.18"},
   "meck": {:hex, :meck, "0.8.3"},
   "mock": {:hex, :mock, "0.1.1"},
   "plug": {:hex, :plug, "1.0.2"},
