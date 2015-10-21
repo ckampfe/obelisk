@@ -7,35 +7,30 @@ defmodule Obelisk.Post do
     )
   end
 
-  def write(post) do
-    File.write(
-      post.path,
-      post.document
-    )
-
-    post
-  end
-
   def title(md) do
     String.slice(md, 11, 1000)
     |> String.replace("-", " ")
-    |> String.replace(".markdown", "")
+    |> String.replace(".md", "")
     |> String.capitalize
   end
 
+  def filename_from_title(title) do
+    datepart = Obelisk.Date.today
+    titlepart = Obelisk.IO.dashify(title)
+    "./posts/#{datepart}-#{titlepart}.md"
+  end
+
   def list do
-    File.ls!("./posts")
+    Obelisk.IO.list("./posts")
     |> Enum.sort
     |> Enum.reverse
   end
 
   def create(title) do
-    File.write(filename_from_title(title), Obelisk.Templates.post(title))
+    Obelisk.IO.create(title, Post)
   end
 
   def filename_from_title(title) do
-    datepart = Chronos.today |> Chronos.Formatter.strftime("%Y-%0m-%0d")
-    titlepart = String.downcase(title) |> String.replace(" ", "-")
-    "./posts/#{datepart}-#{titlepart}.md"
+    "./posts/#{Obelisk.Date.today}-#{Obelisk.IO.dashify(title)}.md"
   end
 end

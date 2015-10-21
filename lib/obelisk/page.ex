@@ -7,25 +7,15 @@ defmodule Obelisk.Page do
     )
   end
 
-  def write(page) do
-    File.write(
-      page.path,
-      page.document
-    )
-
-    page
-  end
-
   def list do
-    File.ls! "./pages"
+    Obelisk.IO.list("./pages")
   end
 
   def create(title) do
-    File.write(filename_from_title(title), Obelisk.Templates.page(title))
+    Obelisk.IO.create(title, Page)
   end
 
   def filename_from_title(title) do
-    titlepart = String.downcase(title) |> String.replace(" ", "-")
-    "./pages/#{titlepart}.md"
+    "./pages/#{Obelisk.IO.dashify(title)}.md"
   end
 end
