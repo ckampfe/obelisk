@@ -4,6 +4,20 @@ defmodule Obelisk.Templates do
   for obelisk sites.
   """
 
+  defmacro __before_compile__(_env) do
+    for template_kind <- ["layout", "index", "post", "page"] do
+      fn_name = String.to_atom("compile_" <> template_kind)
+
+      quote do
+        def unquote(fn_name)() do
+          EEx.compile_file("./theme/layout/#{unquote(template_kind)}.eex")
+        end
+      end
+    end
+  end
+
+  def draft(title), do: post(title)
+
   def post(title) do
     """
     ---

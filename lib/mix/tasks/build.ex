@@ -24,8 +24,8 @@ defmodule Mix.Tasks.Obelisk.Build do
       page_template
     } = compile_templates
 
-    _ = prepare_and_write(Obelisk.Page, {layout_template, page_template})
-    posts_frontmatter = prepare_and_write(Obelisk.Post, {layout_template, post_template})
+    _ = prepare_and_write(Page, layout_template, page_template)
+    posts_frontmatter = prepare_and_write(Post, layout_template, post_template)
 
     Obelisk.RSS.build_feed(posts_frontmatter)
 
