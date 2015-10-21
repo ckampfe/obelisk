@@ -26,7 +26,5 @@ defmodule Mix.Tasks.Obelisk.Post do
   @doc """
   Run the build task
   """
-  def run(args) do
-    hd(args) |> Obelisk.Post.create
-  end
+  def run([title]), do: Obelisk.Post.create(title)
 end

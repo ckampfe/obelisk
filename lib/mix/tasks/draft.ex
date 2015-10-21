@@ -26,7 +26,7 @@ defmodule Mix.Tasks.Obelisk.Draft do
   @doc """
   Run the draft task
   """
-  def run(args) do
-    hd(args) |> Obelisk.Draft.create
+  def run([title]) do
+    Obelisk.Draft.create(title)
   end
 end

@@ -20,5 +20,5 @@ defmodule Mix.Tasks.Obelisk.Page do
   Run the build task
   """
   def run([]), do: raise(ArgumentError, message: "Cannot create a new page without the page name")
-  def run(args), do: hd(args) |> Obelisk.Page.create
+  def run([title]), do: Obelisk.Page.create(title)
 end
