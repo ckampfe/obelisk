@@ -11,8 +11,4 @@ defmodule TestHelper do
     File.rm_rf "./build"
     Mix.Tasks.Obelisk.Init.run([])
   end
-
-  def datepart do
-    Chronos.today |> Chronos.Formatter.strftime("%Y-%0m-%0d")
-  end
 end

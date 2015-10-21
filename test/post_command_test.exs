@@ -10,8 +10,8 @@ defmodule PostTaskTest do
     Mix.Tasks.Obelisk.Init.run([])
     Mix.Tasks.Obelisk.Post.run([ "An awesome post" ])
 
-    assert File.exists? "./posts/#{TestHelper.datepart}-an-awesome-post.md"
-    content = File.read! "./posts/#{TestHelper.datepart}-an-awesome-post.md"
+    assert File.exists? "./posts/#{Obelisk.Date.today}-an-awesome-post.md"
+    content = File.read! "./posts/#{Obelisk.Date.today}-an-awesome-post.md"
     assert String.contains? content, "title: An awesome post"
   end
 

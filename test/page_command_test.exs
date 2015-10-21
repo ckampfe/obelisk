@@ -7,7 +7,7 @@ defmodule PageTaskTest do
 
   test "Create new post" do
     Mix.Tasks.Obelisk.Init.run([])
-    Mix.Tasks.Obelisk.Page.run([ "An awesome page" ])
+    Mix.Tasks.Obelisk.Page.run(["An awesome page"])
 
     assert File.exists? "./pages/an-awesome-page.md"
     content = File.read! "./pages/an-awesome-page.md"

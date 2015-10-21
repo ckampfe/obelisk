@@ -39,6 +39,6 @@ defmodule InitTaskTest do
   test "Init task creates first post" do
     Mix.Tasks.Obelisk.Init.run([])
 
-    assert File.exists? "./posts/#{TestHelper.datepart}-welcome-to-obelisk.md"
+    assert File.exists? "./posts/#{Obelisk.Date.today}-welcome-to-obelisk.md"
   end
 end

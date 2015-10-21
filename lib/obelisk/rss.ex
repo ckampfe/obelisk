@@ -5,8 +5,10 @@ defmodule Obelisk.RSS do
       Dict.get(config, :name),
       Dict.get(config, :url),
       Dict.get(config, :description),
-      Chronos.Formatter.strftime(Chronos.now, "%Y-%0m-%0d %H:%M:%S"),
-      Dict.get(config, :language, "en-us"))
+      Obelisk.Date.now,
+      Dict.get(config, :language, "en-us")
+    )
+
     File.write("./build/blog.rss", RSS.feed(channel, compile_rss(posts)))
   end
 
@@ -22,6 +24,7 @@ defmodule Obelisk.RSS do
       Dict.get(post.frontmatter, :description),
       String.slice(post.filename, 0, 10),
       url,
-      url)
+      url
+    )
   end
 end

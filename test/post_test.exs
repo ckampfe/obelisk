@@ -27,5 +27,4 @@ defmodule PostTest do
     * List
     """
   end
-
 end

@@ -10,9 +10,9 @@ defmodule Mix.Tasks.Obelisk.Perf do
   def run(_) do
     Mix.Tasks.Obelisk.Init.run([])
     make_10k_posts
-    IO.puts Chronos.Formatter.strftime(Chronos.now, "%Y-%0m-%0d-%H:%M:%S")
+    IO.puts(Obelisk.Date.now)
     Mix.Tasks.Obelisk.Build.run([])
-    IO.puts Chronos.Formatter.strftime(Chronos.now, "%Y-%0m-%0d-%H:%M:%S")
+    IO.puts(Obelisk.Date.now)
     cleanup
   end
 
@@ -21,8 +21,7 @@ defmodule Mix.Tasks.Obelisk.Perf do
   end
 
   defp filename(num) do
-    today = Chronos.today
-    "#{Chronos.Formatter.strftime today, "%y-%0m-%0d"}-post-#{num}"
+    "#{Obelisk.Date.today}-post-#{num}"
   end
 
   defp create_post(num) do
