@@ -1,5 +1,5 @@
 defmodule Obelisk.Plug.IndexTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   use Plug.Test
 
   @opts Obelisk.Plug.Index.init([])
