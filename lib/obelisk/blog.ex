@@ -27,7 +27,7 @@ defmodule Obelisk.Blog do
   end
 
   defp write_index_page(posts, layout_template, index_template, page_num, last_page) do
-    index = Obelisk.Document.bind_template(
+    index = Obelisk.Document.apply_template(
       index_template,
       assigns: [
         content: posts,
@@ -36,7 +36,7 @@ defmodule Obelisk.Blog do
       ]
     )
 
-    layout = Obelisk.Document.bind_template(
+    layout = Obelisk.Document.apply_template(
       layout_template,
       assigns: [
         css: Obelisk.Assets.css,
