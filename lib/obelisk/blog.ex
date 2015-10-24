@@ -78,25 +78,17 @@ defmodule Obelisk.Blog do
 
   defp make_path(nil), do: nil
   defp make_path(path) do
-    path
-    |> String.split("/")
-    |> Enum.reverse
-    |> _make_path
-  end
-
-  defp _make_path([_filename|[]]), do: nil
-  defp _make_path([_filename|reverse_path]) do
-    [reverse_path] ++ ["build", "."] # Will reverse to ./build/path/unreversed
-    |> Enum.reverse
-    |> Enum.join("/")
-    |> File.mkdir_p
+    case Path.dirname(path) do
+      "."     -> nil
+      subpath -> Path.join("./build", subpath) |> File.mkdir_p
+    end
   end
 
   defp build_index_path(path), do: "./build/" <> path
 
   defp build_link(path, text), do: "<a href=\"#{path}\">#{text}</a>"
 
-  def previous_page(1),        do: ""
+  def previous_page(1), do: ""
   def previous_page(page_num) do
     Obelisk.Config.config
     |> Dict.get(:blog_index)
