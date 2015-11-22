@@ -8,14 +8,14 @@ defmodule Obelisk.Page do
   end
 
   def list do
-    Obelisk.IO.list("./pages")
+    Obelisk.Document.list("./pages")
   end
 
   def create(title) do
-    Obelisk.IO.create(title, Page)
+    Obelisk.Template.create(title, Page)
   end
 
   def filename_from_title(title) do
-    "./pages/#{Obelisk.IO.dashify(title)}.md"
+    "./pages/#{Obelisk.Document.dashify(title)}.md"
   end
 end

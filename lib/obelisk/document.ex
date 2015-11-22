@@ -1,12 +1,11 @@
 defmodule Obelisk.Document do
   require EEx
-  require Obelisk.Templates
-  import Obelisk.IO, only: [html_path: 1, md_to_html_filename: 1]
+  require Obelisk.Template
 
   # Compile-time macro to define functions that
   # statically compile our template files.
   # See `lib/obelisk/templates.ex`
-  @before_compile Obelisk.Templates
+  @before_compile Obelisk.Template
 
   def prepare(md_file, layout_template, kind_template) do
     {frontmatter, content} =
@@ -22,24 +21,24 @@ defmodule Obelisk.Document do
     %{
       frontmatter: frontmatter,
       document: document,
-      path: html_path(md_file),
-      filename: md_to_html_filename(md_file)
+      path: md_to_html(md_file) |> attach_build_path,
+      filename: md_to_html(md_file) |> attach_build_path
     }
   end
 
   def compile_content(frontmatter, md_file, content, kind_template) do
-    apply_template(
+    compile_template(
       kind_template,
       assigns: [
         content: Earmark.to_html(content),
         frontmatter: frontmatter,
-        filename: md_to_html_filename(md_file)
+        filename: md_to_html(md_file) |> attach_build_path
       ]
     )
   end
 
   def compile_document(content, layout_template) do
-    apply_template(
+    compile_template(
       layout_template,
       assigns: [
         css: Obelisk.Assets.css,
@@ -49,9 +48,18 @@ defmodule Obelisk.Document do
     )
   end
 
-  def apply_template(template, bindings, options \\ []) do
+  def compile_template(template, bindings, options \\ []) do
     {result, _} = Code.eval_quoted(template, bindings, options)
     result
+  end
+
+  def write(item) do
+    File.write!(
+      item.path,
+      item.document
+    )
+
+    item
   end
 
   def title(md) do
@@ -65,5 +73,23 @@ defmodule Obelisk.Document do
   def separate_frontmatter_and_content(page_content) do
     [frontmatter|content] = String.split page_content, "\n---\n"
     {frontmatter, Enum.join(content, "\n")}
+  end
+
+  def dashify(str) do
+    String.downcase(str) |> String.replace(" ", "-")
+  end
+
+  def attach_build_path(document) do
+    Path.join([".", "build", document])
+  end
+
+  def md_to_html(path) do
+    path
+    |> Path.basename(".md")
+    |> (&(&1 <> ".html")).()
+  end
+
+  def list(kind) do
+    File.ls!(kind)
   end
 end

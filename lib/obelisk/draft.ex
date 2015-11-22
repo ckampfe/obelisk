@@ -10,16 +10,12 @@ defmodule Obelisk.Draft do
     |> String.capitalize
   end
 
-  def list do
-    Obelisk.IO.list("./drafts")
-  end
-
   def filename_from_title(title) do
-    titlepart = Obelisk.IO.dashify(title)
+    titlepart = Obelisk.Document.dashify(title)
     "./drafts/#{Obelisk.Date.today}-#{titlepart}.md"
   end
 
   def create(title) do
-    Obelisk.IO.create(title, Draft)
+    Obelisk.Template.create(title, Draft)
   end
 end

@@ -27,12 +27,11 @@ defmodule Obelisk.Build do
   end
 
   defp prepare_async(kind, item, layout_template, kind_template) do
-    kind
-    |> do_async_supervised(:prepare, [item, layout_template, kind_template])
+    do_async_supervised(kind, :prepare, [item, layout_template, kind_template])
   end
 
   defp write_async(item) do
-    do_async_supervised(Obelisk.IO, :write_html, [item])
+    do_async_supervised(Obelisk.Document, :write, [item])
   end
 
   defp do_async_supervised(kind, fun, args) do
@@ -83,7 +82,7 @@ defmodule Obelisk.Build do
   end
 
   defp write_index_page(posts, layout_template, index_template, page_num, last_page) do
-    index = Obelisk.Document.apply_template(
+    index_content = Obelisk.Document.compile_template(
       index_template,
       assigns: [
         content: posts,
@@ -92,18 +91,18 @@ defmodule Obelisk.Build do
       ]
     )
 
-    layout = Obelisk.Document.apply_template(
+    index_page = Obelisk.Document.compile_template(
       layout_template,
       assigns: [
         css: Obelisk.Assets.css,
         js: Obelisk.Assets.js,
-        content: index
+        content: index_content
       ]
     )
 
     File.write(
       html_filename(page_num),
-      layout
+      index_page
     )
   end
 

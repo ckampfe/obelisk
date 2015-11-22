@@ -3,7 +3,7 @@ defmodule Obelisk.Site do
     create_default_theme
     create_content_dirs
     Obelisk.Post.create("Welcome to Obelisk")
-    File.write './site.yml', Obelisk.Templates.config
+    File.write './site.yml', Obelisk.Template.config
   end
 
   def clean do
@@ -23,7 +23,7 @@ defmodule Obelisk.Site do
     File.mkdir "./theme/assets/css"
     File.mkdir "./theme/assets/js"
     File.mkdir "./theme/assets/img"
-    File.write "./theme/assets/css/base.css", Obelisk.Templates.base_css
+    File.write "./theme/assets/css/base.css", Obelisk.Template.base_css
   end
 
   defp create_content_dirs do
@@ -34,9 +34,9 @@ defmodule Obelisk.Site do
 
   defp create_layout_dirs do
     File.mkdir "./theme/layout"
-    File.write "./theme/layout/post.eex", Obelisk.Templates.post_template
-    File.write "./theme/layout/layout.eex", Obelisk.Templates.layout
-    File.write "./theme/layout/index.eex", Obelisk.Templates.index
-    File.write "./theme/layout/page.eex", Obelisk.Templates.page_template
+    File.write "./theme/layout/post.eex", Obelisk.Template.post_template
+    File.write "./theme/layout/layout.eex", Obelisk.Template.layout
+    File.write "./theme/layout/index.eex", Obelisk.Template.index
+    File.write "./theme/layout/page.eex", Obelisk.Template.page_template
   end
 end

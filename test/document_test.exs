@@ -1,5 +1,6 @@
 defmodule DocumentTest do
   use ExUnit.Case, async: false
+  import Obelisk.Document
 
   setup do
     TestHelper.cleanup
@@ -18,6 +19,14 @@ defmodule DocumentTest do
     document = Obelisk.Document.prepare file, layout, page
     assert document.frontmatter.title == "This is the heading"
     assert document.frontmatter.description == "This is the desc"
+  end
+
+  test "file name for post" do
+    assert "post.html" == md_to_html("path/to/post.md")
+  end
+
+  test "html filename with default config" do
+    assert "./build/post.html" == md_to_html("path/to/post.md") |> attach_build_path
   end
 
   defp filename(day) do

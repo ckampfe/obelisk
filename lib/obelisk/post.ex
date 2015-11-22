@@ -16,21 +16,21 @@ defmodule Obelisk.Post do
 
   def filename_from_title(title) do
     datepart = Obelisk.Date.today
-    titlepart = Obelisk.IO.dashify(title)
+    titlepart = Obelisk.Document.dashify(title)
     "./posts/#{datepart}-#{titlepart}.md"
   end
 
   def list do
-    Obelisk.IO.list("./posts")
+    Obelisk.Document.list("./posts")
     |> Enum.sort
     |> Enum.reverse
   end
 
   def create(title) do
-    Obelisk.IO.create(title, Post)
+    Obelisk.Template.create(title, Post)
   end
 
   def filename_from_title(title) do
-    "./posts/#{Obelisk.Date.today}-#{Obelisk.IO.dashify(title)}.md"
+    "./posts/#{Obelisk.Date.today}-#{Obelisk.Document.dashify(title)}.md"
   end
 end

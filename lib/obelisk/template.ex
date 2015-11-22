@@ -1,4 +1,4 @@
-defmodule Obelisk.Templates do
+defmodule Obelisk.Template do
   @moduledoc """
   This module contains various templates for building initial files
   for obelisk sites.
@@ -14,6 +14,28 @@ defmodule Obelisk.Templates do
         end
       end
     end
+  end
+
+  def create(title, kind) do
+    fn_name =
+      Module.split(kind) # break into modules
+    |> List.last       # last submodule
+    |> String.downcase
+    |> String.to_atom
+
+    draft_content =
+      apply(
+        Obelisk.Template,
+        fn_name,
+        [title]
+      )
+
+    kind_io_module = Module.concat([Obelisk, kind])
+
+    File.write!(
+      kind_io_module.filename_from_title(title),
+      draft_content
+    )
   end
 
   def draft(title), do: post(title)
