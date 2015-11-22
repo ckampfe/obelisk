@@ -22,52 +22,22 @@ defmodule Mix.Tasks.Obelisk.Build do
       index_template,
       post_template,
       page_template
-    } = compile_templates
+    } = Obelisk.Build.compile_templates
 
-    _ = prepare_and_write(Page, layout_template, page_template)
-    posts_frontmatter = prepare_and_write(Post, layout_template, post_template)
+    _ = Obelisk.Build.prepare_and_write(
+      {Obelisk.Page, layout_template, page_template}
+    )
+
+    posts_frontmatter = Obelisk.Build.prepare_and_write(
+      {Obelisk.Post, layout_template, post_template}
+    )
 
     Obelisk.RSS.build_feed(posts_frontmatter)
 
-    Obelisk.Blog.compile_index(
+    Obelisk.Build.compile_index(
       posts_frontmatter,
       layout_template,
       index_template
     )
-  end
-
-  defp prepare_and_write(kind, layout_template, kind_template) do
-    Module.concat([Obelisk, kind]).list
-    |> Enum.map(&prepare_async(kind, &1, layout_template, kind_template))
-    |> Enum.map(&Task.await(&1, 20000))
-    |> Enum.map(&write_async(&1))
-    |> Enum.map(&Task.await(&1, 20000))
-  end
-
-  defp prepare_async(kind, item, layout_template, kind_template) do
-    Module.concat([Obelisk, kind])
-    |> do_async_supervised(:prepare, [item, layout_template, kind_template])
-  end
-
-  defp write_async(item) do
-    do_async_supervised(Obelisk.IO, :write_html, [item])
-  end
-
-  defp do_async_supervised(kind, fun, args) do
-    Task.Supervisor.async(
-      Obelisk.RenderSupervisor,
-      kind,
-      fun,
-      args
-    )
-  end
-
-  defp compile_templates do
-    {
-      Obelisk.Document.compile_layout,
-      Obelisk.Document.compile_index,
-      Obelisk.Document.compile_post,
-      Obelisk.Document.compile_page
-    }
   end
 end

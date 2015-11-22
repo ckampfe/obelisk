@@ -1,5 +1,61 @@
-defmodule Obelisk.Blog do
+defmodule Obelisk.Build do
   require Integer
+
+  def prepare_and_write({kind, _, _}=opts) do
+    items = kind.list
+    schedulers = number_of_vm_schedulers
+    workers = bucket_work_by_schedulers(items, schedulers)
+    Enum.flat_map(workers, &do_prepare_and_write_batch(&1, opts))
+  end
+
+  defp do_prepare_and_write_batch(batch, {kind, layout_template, kind_template}) do
+    batch
+    |> Enum.map(&prepare_async(kind, &1, layout_template, kind_template))
+    |> Enum.map(&Task.await(&1, 20000))
+    |> Enum.map(&write_async(&1))
+    |> Enum.map(&Task.await(&1, 20000))
+  end
+
+  defp bucket_work_by_schedulers(items, number_of_schedulers) do
+    Enum.with_index(items)
+    |> Enum.group_by(fn({_el, index}) ->
+      rem(index, number_of_schedulers)
+    end)
+    |> Enum.map(fn({_scheduler_number, coll}) ->
+      Enum.map(coll, fn({el, _index}) -> el end)
+    end)
+  end
+
+  defp prepare_async(kind, item, layout_template, kind_template) do
+    kind
+    |> do_async_supervised(:prepare, [item, layout_template, kind_template])
+  end
+
+  defp write_async(item) do
+    do_async_supervised(Obelisk.IO, :write_html, [item])
+  end
+
+  defp do_async_supervised(kind, fun, args) do
+    Task.Supervisor.async(
+      Obelisk.RenderSupervisor,
+      kind,
+      fun,
+      args
+    )
+  end
+
+  def compile_templates do
+    {
+      Obelisk.Document.compile_layout,
+      Obelisk.Document.compile_index,
+      Obelisk.Document.compile_post,
+      Obelisk.Document.compile_page
+    }
+  end
+
+  defp number_of_vm_schedulers do
+    :erlang.system_info(:schedulers_online)
+  end
 
   def compile_index(posts, layout_template, index_template) do
     Obelisk.Config.config
