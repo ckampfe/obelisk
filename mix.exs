@@ -26,7 +26,8 @@ defmodule Obelisk.Mixfile do
      {:cowboy, "~> 1.0"},
      {:plug, "~> 1.0"},
      {:rss, "~> 0.2"},
-     {:mock, "~> 0.1", only: :test}
+     {:mock, "~> 0.1", only: :test},
+     {:credo, "~> 0.1", only: [:dev, :test]}
     ]
   end
 
