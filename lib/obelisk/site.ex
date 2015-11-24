@@ -2,7 +2,7 @@ defmodule Obelisk.Site do
   def initialize do
     create_default_theme
     create_content_dirs
-    Obelisk.Post.create("Welcome to Obelisk")
+    Obelisk.Template.create("Welcome to Obelisk", :post)
     File.write './site.yml', Obelisk.Template.config
   end
 

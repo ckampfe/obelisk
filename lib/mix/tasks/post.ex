@@ -26,5 +26,5 @@ defmodule Mix.Tasks.Obelisk.Post do
   @doc """
   Run the build task
   """
-  def run([title]), do: Obelisk.Post.create(title)
+  def run([title]), do: Obelisk.Template.create(title, :post)
 end

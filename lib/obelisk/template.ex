@@ -17,23 +17,15 @@ defmodule Obelisk.Template do
   end
 
   def create(title, kind) do
-    fn_name =
-      Module.split(kind) # break into modules
-    |> List.last       # last submodule
-    |> String.downcase
-    |> String.to_atom
-
     draft_content =
       apply(
         Obelisk.Template,
-        fn_name,
+        kind,
         [title]
       )
 
-    kind_io_module = Module.concat([Obelisk, kind])
-
     File.write!(
-      kind_io_module.filename_from_title(title),
+      Obelisk.Compiler.title_to_filename(title, kind),
       draft_content
     )
   end

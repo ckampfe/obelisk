@@ -22,19 +22,19 @@ defmodule Mix.Tasks.Obelisk.Build do
       index_template,
       post_template,
       page_template
-    } = Obelisk.Build.compile_templates
+    } = Obelisk.Compiler.compile_templates
 
-    _ = Obelisk.Build.prepare_and_write(
-      {Obelisk.Page, layout_template, page_template}
+    _ = Obelisk.Compiler.compile_and_write(
+      {:page, layout_template, page_template}
     )
 
-    posts_frontmatter = Obelisk.Build.prepare_and_write(
-      {Obelisk.Post, layout_template, post_template}
+    posts_frontmatter = Obelisk.Compiler.compile_and_write(
+      {:post, layout_template, post_template}
     )
 
     Obelisk.RSS.build_feed(posts_frontmatter)
 
-    Obelisk.Build.compile_index(
+    Obelisk.Compiler.compile_index(
       posts_frontmatter,
       layout_template,
       index_template

@@ -16,6 +16,6 @@ defmodule Obelisk.Draft do
   end
 
   def create(title) do
-    Obelisk.Template.create(title, Draft)
+    Obelisk.Template.create(title, :draft)
   end
 end

@@ -8,7 +8,7 @@ defmodule PageTest do
   test "can list pages" do
     Mix.Tasks.Obelisk.Init.run([])
     File.touch "./pages/about-me.md"
-    pages = Obelisk.Page.list
+    pages = Obelisk.Compiler.list(:page)
     assert 1 == Enum.count(pages)
     [h|_] = pages
     assert h == "about-me.md"
