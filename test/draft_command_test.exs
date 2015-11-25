@@ -9,9 +9,9 @@ defmodule DraftTaskTest do
     Mix.Tasks.Obelisk.Init.run([])
     Mix.Tasks.Obelisk.Draft.run(["Not quite ready yet"])
 
-    assert File.exists? "./drafts/#{Obelisk.Date.today}-not-quite-ready-yet.md"
-    content = File.read! "./drafts/#{Obelisk.Date.today}-not-quite-ready-yet.md"
-    assert String.contains? content, "title: Not quite ready yet"
+    assert File.exists?("./drafts/#{Obelisk.Date.today}-not-quite-ready-yet.md")
+    content = File.read!("./drafts/#{Obelisk.Date.today}-not-quite-ready-yet.md")
+    assert String.contains?(content, "title: Not quite ready yet")
   end
 
   test "Command should fail if no args are passed" do

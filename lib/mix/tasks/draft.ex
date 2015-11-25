@@ -27,6 +27,6 @@ defmodule Mix.Tasks.Obelisk.Draft do
   Run the draft task
   """
   def run([title]) do
-    Obelisk.Draft.create(title)
+    Obelisk.Template.create(title, :draft)
   end
 end
