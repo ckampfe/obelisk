@@ -17,12 +17,14 @@ defmodule Obelisk.RSS do
   end
 
   defp build_item(post) do
+    filename = Path.basename(post.path)
+
     config = Obelisk.Config.config
-    url = Dict.get(config, :url, "") <> "/" <> post.filename
+    url = Dict.get(config, :url, "") <> "/" <> filename
     RSS.item(
       Dict.get(post.frontmatter, :title),
       Dict.get(post.frontmatter, :description),
-      String.slice(post.filename, 0, 10),
+      String.slice(filename, 0, 10),
       url,
       url
     )

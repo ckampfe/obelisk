@@ -56,11 +56,11 @@ defmodule CompilerTest do
   end
 
   test "file name for post" do
-    assert "post.html" == Compiler.md_to_html("path/to/post.md")
+    assert "post.html" == Compiler.md_to_html_extension("path/to/post.md")
   end
 
   test "html filename with default config" do
-    assert "./build/post.html" == Compiler.md_to_html("path/to/post.md") |> Compiler.attach_build_path
+    assert "./build/post.html" == Compiler.md_to_html_extension("path/to/post.md") |> Compiler.with_build_path
   end
 
   test "Build task compiles posts into the build dir" do
@@ -172,6 +172,9 @@ defmodule CompilerTest do
     assert File.exists? "./build/blog/index2.html"
   end
 
+  test "attaches build path to the filename" do
+    assert "./build/a-great-post.html" == Compiler.with_build_path("a-great-post.html")
+  end
 
   test "html filename with no config is index.html" do
     assert "./build/index.html" == Compiler.html_filename(1)

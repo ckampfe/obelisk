@@ -113,7 +113,7 @@ defmodule Obelisk.Template do
     <div class="index">
       <%= Enum.map @content, fn(post) ->
         \"\"\"
-        #\{post.filename}
+        #\{Path.basename(post.path)}
         <hr />
         \"\"\"
       end %>
