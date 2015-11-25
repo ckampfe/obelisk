@@ -7,6 +7,7 @@ defmodule Obelisk.Mixfile do
      elixir: "~> 1.0",
      package: package,
      docs: [readme: true, main: "README.md"],
+     build_embedded: Mix.env == :prod,
      description: """
       obelisk is a static site generator for Elixir. It is inspired by jekyll,
       with the goal of being fast and simple to use and extend.
