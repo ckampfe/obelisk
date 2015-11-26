@@ -2,31 +2,45 @@ defmodule Obelisk.RSS do
   def build_feed(posts) do
     config = Obelisk.Config.config
     channel = RSS.channel(
-      Dict.get(config, :name),
-      Dict.get(config, :url),
-      Dict.get(config, :description),
+      Map.get(config, :name),
+      Map.get(config, :url),
+      Map.get(config, :description),
       Obelisk.Date.now,
-      Dict.get(config, :language, "en-us")
+      Map.get(config, :language, "en-us")
     )
 
-    File.write("./build/blog.rss", RSS.feed(channel, compile_rss(posts)))
+    items = compile_rss(posts)
+    feed = RSS.feed(channel, items)
+    File.write("./build/blog.rss", feed)
   end
 
   defp compile_rss(posts) do
-    posts |> Enum.map &(build_item &1)
+    config = Obelisk.Config.config
+    base_url = Map.get(config, :url, "")
+
+    posts
+    |> Enum.map(&get_item_info(&1, base_url))
+    |> Enum.map(&build_item/1)
   end
 
-  defp build_item(post) do
-    filename = Path.basename(post.path)
-
-    config = Obelisk.Config.config
-    url = Dict.get(config, :url, "") <> "/" <> filename
+  defp build_item({title, description, filename, url}) do
     RSS.item(
-      Dict.get(post.frontmatter, :title),
-      Dict.get(post.frontmatter, :description),
+      title,
+      description,
       String.slice(filename, 0, 10),
       url,
       url
     )
+  end
+
+  defp get_item_info(item, base_url) do
+    filename = Path.basename(item.path)
+
+    {
+      Map.get(item.frontmatter, :title),
+      Map.get(item.frontmatter, :description),
+      filename,
+      base_url <> "/" <> filename
+    }
   end
 end
