@@ -34,13 +34,13 @@ defmodule Obelisk.Compiler do
     }
   end
 
-  def compile_content(frontmatter, md_file, content, kind_template) do
+  def compile_content(frontmatter, input_filename, content, kind_template) do
     compile_template(
       kind_template,
       assigns: [
-        content: Earmark.to_html(content),
+        content: content,
         frontmatter: frontmatter,
-        filename: md_to_html_extension(md_file) |> with_build_path
+        filename: md_to_html_extension(input_filename) |> with_build_path
       ]
     )
   end
