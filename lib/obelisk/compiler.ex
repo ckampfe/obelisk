@@ -4,6 +4,8 @@ defmodule Obelisk.Compiler do
   @before_compile Obelisk.Template
 
   def compile(kind, input_filename, layout_template, kind_template) do
+    site = Obelisk.Config.config
+
     {yaml_frontmatter, md_content} =
       Path.join([path_for(kind), input_filename])
       |> File.read!
@@ -22,7 +24,9 @@ defmodule Obelisk.Compiler do
 
     compiled_document = compile_document(
       compiled_content,
-      layout_template
+      layout_template,
+      frontmatter.title,
+      site.name
     )
 
     output_filename = md_to_html_extension(input_filename)
@@ -45,13 +49,15 @@ defmodule Obelisk.Compiler do
     )
   end
 
-  def compile_document(content, layout_template) do
+  def compile_document(content, layout_template, title, site_name) do
     compile_template(
       layout_template,
       assigns: [
         css: Obelisk.Assets.css,
         js: Obelisk.Assets.js,
-        content: content
+        content: content,
+        title: title,
+        site_name: site_name
       ]
     )
   end
@@ -157,6 +163,7 @@ defmodule Obelisk.Compiler do
     page_num,
     last_page
   ) do
+
     index_content = compile_template(
       index_template,
       assigns: [
@@ -171,7 +178,8 @@ defmodule Obelisk.Compiler do
       assigns: [
         css: Obelisk.Assets.css,
         js: Obelisk.Assets.js,
-        content: index_content
+        content: index_content,
+        site_name: Obelisk.Config.config.name
       ]
     )
 

@@ -92,7 +92,13 @@ defmodule Obelisk.Template do
   <!DOCTYPE html>
   <html>
     <head>
-      <title>This should be replaced by whats in site.yml</title>
+      <title>
+        <%= if @title do %>
+          <%= @title <> " - " <> @site_name %>
+        <% else %>
+          <%= @site_name %>
+        <% end %>
+      </title>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
       <%= @css %>
       <%= @js %>

@@ -45,14 +45,24 @@ defmodule CompilerTest do
     Mix.Tasks.Obelisk.Init.run []
     Mix.Tasks.Obelisk.Build.run []
     create_post(10)
-    file = "#{filename(10)}.md"
+    input_filename = "#{filename(10)}.md"
 
-    layout = Compiler.compile_layout
-    page   = Compiler.compile_page
+    layout_template = Compiler.compile_layout
+    kind_template = Compiler.compile_post
 
-    document = Compiler.compile(:post, file, layout, page)
-    assert document.frontmatter.title == "This is the heading"
-    assert document.frontmatter.description == "This is the desc"
+    post = Compiler.compile(
+      :post,
+      input_filename,
+      layout_template,
+      kind_template
+    )
+
+    title = post.frontmatter.title
+    site_name = Obelisk.Config.config.name
+
+    assert post.frontmatter.title == "This is the heading"
+    assert post.frontmatter.description == "This is the desc"
+    assert String.contains?(post.document, title <> " - " <> site_name)
   end
 
   test "file name for post" do
