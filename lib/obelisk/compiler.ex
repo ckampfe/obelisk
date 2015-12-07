@@ -1,5 +1,6 @@
 defmodule Obelisk.Compiler do
   require Obelisk.Template
+  alias Earmark.Options
 
   @before_compile Obelisk.Template
 
@@ -11,7 +12,11 @@ defmodule Obelisk.Compiler do
       |> File.read!
       |> separate_frontmatter_and_content
 
-    html = Earmark.to_html(md_content)
+    html =
+      case site.smartquotes do
+        "true" -> Earmark.to_html(md_content)
+        "false" -> Earmark.to_html(md_content, %Options{smartypants: false})
+      end
 
     frontmatter = Obelisk.FrontMatter.parse(yaml_frontmatter)
 

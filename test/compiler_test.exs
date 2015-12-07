@@ -37,6 +37,11 @@ defmodule CompilerTest do
     * Of
     * Things
 
+
+    "some quoted thing"
+
+    'single quotes' here
+
     `and some inline code` for good measure
     """
   end
@@ -127,6 +132,7 @@ defmodule CompilerTest do
     url: http://my.blog.com
     posts_per_page: 5
     theme: default
+    smartquotes: false
     """)
     Obelisk.Config.reload
     Mix.Tasks.Obelisk.Build.run []
@@ -144,6 +150,48 @@ defmodule CompilerTest do
     assert length(p3) == 3 # one extra for prev page
   end
 
+  test "build blog with smartquotes" do
+    Mix.Tasks.Obelisk.Init.run([])
+    1..10 |> Enum.each(&(create_post &1))
+    File.write("site.yml", """
+    ---
+    name: My Blog
+    description: My Blog about things
+    url: http://my.blog.com
+    posts_per_page: 5
+    theme: default
+    blog_index: "blog.html"
+    smartquotes: true
+    """)
+    Obelisk.Config.reload
+    Mix.Tasks.Obelisk.Build.run([])
+
+    f = File.read!("./build/2014-01-1-post-with-day-1.html")
+    assert String.contains?(f, "“")
+    assert String.contains?(f, "’")
+  end
+
+  test "build blog without smartquotes" do
+    Mix.Tasks.Obelisk.Init.run([])
+    create_post(1)
+    File.write("site.yml", """
+    ---
+    name: My Blog
+    description: My Blog about things
+    url: http://my.blog.com
+    posts_per_page: 5
+    theme: default
+    blog_index: "blog.html"
+    smartquotes: false
+    """)
+    Obelisk.Config.reload
+    Mix.Tasks.Obelisk.Build.run([])
+
+    f = File.read!("./build/2014-01-1-post-with-day-1.html")
+    assert String.contains?(f, "“") == false
+    assert String.contains?(f, "’") == false
+  end
+
   test "build blog part to different page" do
     Mix.Tasks.Obelisk.Init.run([])
     1..10 |> Enum.each(&(create_post &1))
@@ -155,6 +203,7 @@ defmodule CompilerTest do
     posts_per_page: 5
     theme: default
     blog_index: "blog.html"
+    smartquotes: false
     """)
     Obelisk.Config.reload
     Mix.Tasks.Obelisk.Build.run([])
@@ -174,6 +223,7 @@ defmodule CompilerTest do
     posts_per_page: 5
     theme: default
     blog_index: "blog/index.html"
+    smartquotes: false
     """)
     Obelisk.Config.reload
     Mix.Tasks.Obelisk.Build.run([])
