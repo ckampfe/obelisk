@@ -17,7 +17,7 @@ defmodule Mix.Tasks.Obelisk.Perf do
   end
 
   defp make_10k_posts do
-    1..10_000 |> Enum.each &(create_post &1)
+    1..10_000 |> Enum.each(&(create_post(&1)))
   end
 
   defp filename(num) do

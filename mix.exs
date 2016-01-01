@@ -3,8 +3,8 @@ defmodule Obelisk.Mixfile do
 
   def project do
     [app: :obelisk,
-     version: "0.11.2",
-     elixir: "~> 1.0",
+     version: "0.12.0",
+     elixir: ">= 1.2.0",
      package: package,
      docs: [readme: true, main: "README.md"],
      build_embedded: Mix.env == :prod,
