@@ -1,5 +1,6 @@
 defmodule Obelisk.Compiler do
   require Obelisk.Template
+  alias Obelisk.FS
   alias Earmark.Options
 
   @before_compile Obelisk.Template
@@ -8,7 +9,7 @@ defmodule Obelisk.Compiler do
     site = Obelisk.Config.config
 
     {yaml_frontmatter, md_content} =
-      Path.join([path_for(kind), input_filename])
+      Path.join([FS.path_for(kind), input_filename])
       |> File.read!
       |> separate_frontmatter_and_content
 
@@ -18,7 +19,7 @@ defmodule Obelisk.Compiler do
         "false" -> Earmark.to_html(md_content, %Options{smartypants: false})
       end
 
-    frontmatter = Obelisk.FrontMatter.parse(yaml_frontmatter)
+    frontmatter = Obelisk.YAML.parse(yaml_frontmatter)
 
     compiled_content = compile_content(
       frontmatter,
@@ -34,12 +35,12 @@ defmodule Obelisk.Compiler do
       site.name
     )
 
-    output_filename = md_to_html_extension(input_filename)
+    output_filename = FS.md_to_html_extension(input_filename)
 
     %{
       frontmatter: frontmatter,
       document:    compiled_document,
-      path:        output_filename |> with_build_path
+      path:        output_filename |> FS.with_build_path
     }
   end
 
@@ -49,7 +50,7 @@ defmodule Obelisk.Compiler do
       assigns: [
         content: content,
         frontmatter: frontmatter,
-        filename: md_to_html_extension(input_filename) |> with_build_path
+        filename: FS.md_to_html_extension(input_filename) |> FS.with_build_path
       ]
     )
   end
@@ -73,7 +74,7 @@ defmodule Obelisk.Compiler do
   end
 
   def compile_and_write({kind, _, _}=opts) do
-    items = list(kind)
+    items = FS.list(kind)
     schedulers = number_of_vm_schedulers
     workers = bucket_work_by_schedulers(items, schedulers)
     Enum.flat_map(workers, &do_compile_and_write_batch(&1, opts))
@@ -139,7 +140,7 @@ defmodule Obelisk.Compiler do
   def compile_index(posts, layout_template, index_template) do
     Obelisk.Config.config
     |> Map.get(:blog_index)
-    |> make_path
+    |> FS.make_path
 
     posts
     |> Enum.sort(&(&1.frontmatter.created >= &2.frontmatter.created))
@@ -155,7 +156,7 @@ defmodule Obelisk.Compiler do
       layout_template,
       index_template,
       page_num,
-      last_page?(remaining)
+      FS.last_page?(remaining)
     )
 
     do_compile_index(remaining, layout_template, index_template, page_num + 1)
@@ -189,56 +190,9 @@ defmodule Obelisk.Compiler do
     )
 
     File.write(
-      html_filename(page_num),
+      FS.html_filename(page_num),
       index_page
     )
-  end
-
-  defp last_page?([]), do: true
-  defp last_page?(_),  do: false
-
-  def html_filename(page_num) do
-    Obelisk.Config.config
-    |> Map.get(:blog_index)
-    |> with_index_num(page_num)
-    |> build_index_path
-  end
-
-  defp with_index_num(nil, 1), do: "index.html"
-  defp with_index_num(nil, page_num), do: "index#{page_num}.html"
-  defp with_index_num(index_filename, 1), do: index_filename
-  defp with_index_num(index_filename, page_num) do
-    extension = Path.extname(index_filename)
-    path = Path.rootname(index_filename, extension)
-    path <> to_string(page_num) <> extension
-  end
-
-  defp make_path(nil), do: nil
-  defp make_path(path) do
-    case Path.dirname(path) do
-      "."     -> nil
-      subpath -> Path.join("./build", subpath) |> File.mkdir_p
-    end
-  end
-
-  defp build_index_path(path), do: Path.join([".", "build", path])
-
-  defp build_link(path, text), do: "<a href=\"#{path}\">#{text}</a>"
-
-  def previous_page(1), do: ""
-  def previous_page(page_num) do
-    Obelisk.Config.config
-    |> Map.get(:blog_index)
-    |> with_index_num(page_num - 1)
-    |> build_link("Previous Page")
-  end
-
-  def next_page(_page_num, true),  do: ""
-  def next_page(page_num,  false) do
-    Obelisk.Config.config
-    |> Map.get(:blog_index)
-    |> with_index_num(page_num + 1)
-    |> build_link("Next Page")
   end
 
   def separate_frontmatter_and_content(page_content) do
@@ -250,41 +204,21 @@ defmodule Obelisk.Compiler do
     String.downcase(str) |> String.replace(" ", "-")
   end
 
-  def with_build_path(filename) do
-    Path.join([".", "build", filename])
+  def previous_page(1), do: ""
+  def previous_page(page_num) do
+    Obelisk.Config.config
+    |> Map.get(:blog_index)
+    |> FS.with_index_num(page_num - 1)
+    |> build_link("Previous Page")
   end
 
-  def md_to_html_extension(path) do
-    path
-    |> Path.basename(".md")
-    |> (&(&1 <> ".html")).()
+  def next_page(_page_num, true),  do: ""
+  def next_page(page_num,  false) do
+    Obelisk.Config.config
+    |> Map.get(:blog_index)
+    |> FS.with_index_num(page_num + 1)
+    |> build_link("Next Page")
   end
 
-  def list(kind) do
-    path_for(kind) |> File.ls!
-  end
-
-  def filename_to_title(md) do
-    String.slice(md, 11, 1000)
-    |> String.replace("-", " ")
-    |> String.replace(".md", "")
-    |> String.capitalize
-  end
-
-  def title_to_filename(title, kind) do
-    date = Obelisk.Date.today
-
-    combined =
-      case kind do
-        :post -> date <> "-" <> title
-        :page -> title
-        :draft -> date <> "-" <> title
-      end
-
-    Path.join(to_string(kind) <> "s", "#{dashify(combined)}.md")
-  end
-
-  defp path_for(kind) do
-    Path.join(".", to_string(kind) <> "s")
-  end
+  def build_link(path, text), do: "<a href=\"#{path}\">#{text}</a>"
 end

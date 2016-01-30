@@ -25,7 +25,7 @@ defmodule Obelisk.Template do
       )
 
     File.write!(
-      Obelisk.Compiler.title_to_filename(title, kind),
+      Obelisk.FS.title_to_filename(title, kind),
       draft_content
     )
   end

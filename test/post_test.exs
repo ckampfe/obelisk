@@ -3,7 +3,7 @@ defmodule PostTest do
 
   test "Can properly parse md filename to post name" do
     filename = "2014-02-03-this-is-a-test.md"
-    processed = Obelisk.Compiler.filename_to_title(filename)
+    processed = Obelisk.FS.filename_to_title(filename)
     assert processed == "This is a test"
   end
 

@@ -70,18 +70,10 @@ defmodule CompilerTest do
     assert String.contains?(post.document, title <> " - " <> site_name)
   end
 
-  test "file name for post" do
-    assert "post.html" == Compiler.md_to_html_extension("path/to/post.md")
-  end
-
-  test "html filename with default config" do
-    assert "./build/post.html" == Compiler.md_to_html_extension("path/to/post.md") |> Compiler.with_build_path
-  end
-
   test "Build task compiles posts into the build dir" do
     Mix.Tasks.Obelisk.Init.run([])
     Obelisk.Config.reload
-    Enum.each(10..15, fn day -> create_post day end)
+    Enum.each(10..15, fn day -> create_post(day) end)
     Mix.Tasks.Obelisk.Build.run([])
 
     for day <- 10..15 do
@@ -230,38 +222,6 @@ defmodule CompilerTest do
 
     assert File.exists? "./build/blog/index.html"
     assert File.exists? "./build/blog/index2.html"
-  end
-
-  test "attaches build path to the filename" do
-    assert "./build/a-great-post.html" == Compiler.with_build_path("a-great-post.html")
-  end
-
-  test "html filename with no config is index.html" do
-    assert "./build/index.html" == Compiler.html_filename(1)
-  end
-
-  test "html filename page 10 with no config is index10.html" do
-    assert "./build/index10.html" == Compiler.html_filename(10)
-  end
-
-  test "html filename with single page config is blog.html" do
-    Obelisk.Config.force %{blog_index: "blog.html"}
-    assert "./build/blog.html" == Compiler.html_filename(1)
-  end
-
-  test "html filename with single page 10 config is blog10.html" do
-    Obelisk.Config.force %{blog_index: "blog.html"}
-    assert "./build/blog10.html" == Compiler.html_filename(10)
-  end
-
-  test "html filename with path config is blog/index.html" do
-    Obelisk.Config.force %{blog_index: "blog/index.html"}
-    assert "./build/blog/index.html" == Compiler.html_filename(1)
-  end
-
-  test "html filename with path 10 config is blog/index10.html" do
-    Obelisk.Config.force %{blog_index: "blog/index.html"}
-    assert "./build/blog/index10.html" == Compiler.html_filename(10)
   end
 
   test "next page on last page" do

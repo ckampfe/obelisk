@@ -8,7 +8,7 @@ defmodule ConfigTest do
   end
 
   test "config is default if it doesn't exist not exist" do
-    default = Obelisk.YamlToDict.convert(%{}, hd(:yamerl_constr.string(Obelisk.Template.config)))
+    default = Obelisk.YAML.convert(%{}, hd(:yamerl_constr.string(Obelisk.Template.config)))
     assert default == Obelisk.Config.config
   end
 

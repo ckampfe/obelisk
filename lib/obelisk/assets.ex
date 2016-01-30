@@ -1,19 +1,10 @@
 defmodule Obelisk.Assets do
-  def copy, do: File.cp_r("./theme/assets", "./build/assets")
+  alias Obelisk.FS
 
-  def css_files do
-    File.ls!("./build/assets/css")
-    |> Enum.sort
-    |> Enum.map(&("assets/css/#{&1}"))
-    |> Enum.filter(&(!File.dir? "./build/#{&1}"))
-  end
+  def copy, do: FS.copy_dir("./theme/assets", "./build/assets")
 
-  def js_files do
-    File.ls!("./build/assets/js")
-    |> Enum.sort
-    |> Enum.map(&("assets/js/#{&1}"))
-    |> Enum.filter(&(!File.dir? "./build/#{&1}"))
-  end
+  def css_files, do: FS.built_asset_files("css")
+  def js_files, do: FS.built_asset_files("js")
 
   def css do
     css_files
